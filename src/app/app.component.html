@@ -1,8 +1,11 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<md-toolbar color="primary">
-  <span>Конверты</span>
-  <span class="menu-spacer"></span>
-  <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon></button>
+<md-toolbar color="accent">
+  <table id="header">
+    <tr>
+      <td><span>Конверты</span></td>
+      <td style="width: 100%"></td>
+      <td><button id="menuButton" md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon></button></td>
+    </tr>
+  </table>
 </md-toolbar>
 <md-menu #appMenu="mdMenu">
   <button md-menu-item>Item1</button>
