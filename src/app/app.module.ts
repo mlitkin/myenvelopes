@@ -13,7 +13,10 @@ import { MdButtonModule,
  } from '@angular/material';
 
 import { AuthGuard }   from './auth.guard';
+
 import {LoginService} from './services/login.service';
+import {HttpService} from './services/http.service';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { PeriodEnvelopesComponent } from './period-envelopes/period-envelopes.component';
@@ -46,7 +49,7 @@ const appRoutes: Routes =[
     MdCardModule,
     MdToolbarModule
   ],
-  providers: [LoginService, AuthGuard],
+  providers: [LoginService, AuthGuard, HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

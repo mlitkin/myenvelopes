@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, UserRole } from "../models/user";
+import {HttpService} from './http.service';
 
 @Injectable()
 export class LoginService {
@@ -7,7 +8,7 @@ export class LoginService {
   /**Текущий пользователь. */
   public user: User;
 
-  constructor() {
+  constructor(private httpService: HttpService) {
     this.user = new User();
     this.user.login = 'guest';
     this.user.role = UserRole.Public;
@@ -15,5 +16,9 @@ export class LoginService {
 
   isAuthenticated(): boolean {
     return this.user && this.user.role != UserRole.Public;
+  }
+
+  login(login: string, password: string) {
+    alert(login);   
   }
 }
