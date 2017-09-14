@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {Routes, RouterModule} from '@angular/router';
+import { FormsModule }   from '@angular/forms';
 import { MdButtonModule, 
   MdInputModule,
   MdCheckboxModule,
@@ -9,7 +11,6 @@ import { MdButtonModule,
   MdCardModule,
   MdToolbarModule
  } from '@angular/material';
-import {Routes, RouterModule} from '@angular/router';
 
 import { AuthGuard }   from './auth.guard';
 import {LoginService} from './services/login.service';
@@ -36,6 +37,7 @@ const appRoutes: Routes =[
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes),
+    FormsModule,
     MdButtonModule, 
     MdInputModule,
     MdCheckboxModule,    
