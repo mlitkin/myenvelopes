@@ -19,6 +19,11 @@ export class LoginService {
   }
 
   login(login: string, password: string) {
-    alert(login);   
+    this.httpService.getUserToken(login, password)
+      .subscribe(
+        data => alert(data)
+      );
+    
+    //alert(login);   
   }
 }
