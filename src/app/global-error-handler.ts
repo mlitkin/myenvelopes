@@ -1,17 +1,17 @@
-import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { DialogService } from './services/dialog.service';
 
 @Injectable()
 export class GlobalErrorHandler extends ErrorHandler {
-  constructor(private injector: Injector) {
+  constructor() {
     super(true);
    }
 
   handleError(error) {
      //Обработчик тут.
     alert(1);
-    const dialogService = this.injector.get(DialogService);
-    dialogService.showError('Текст ошибки', 'Заголовок');
+    var el = document.getElementById("errorOverlay");
+    el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 
      super.handleError(error);
   }  
