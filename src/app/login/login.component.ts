@@ -1,22 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { LoginService } from '../services/login.service';
+import { UserService } from '../services/user.service';
+import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private login: string;
   private password: string;
+  private subscription: Subscription;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private userService: UserService, private activateRoute: ActivatedRoute) {
+    this.subscription = activateRoute.queryParams.subscribe(params => {
+      let returnPath = params['returnPath'];
+      if (returnPath) {
+        this.userService.tryLoginByCookie(returnPath);  
+      }
+    });
+   }
 
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   submit(form: NgForm){
-    this.loginService.login(this.login, this.password);
+    this.userService.login(this.login, this.password);
   }
 }

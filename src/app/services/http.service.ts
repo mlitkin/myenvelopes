@@ -10,8 +10,8 @@ export class HttpService {
 
   constructor(private http: Http) { }
 
-  getUserToken(login: string, password: string) : Observable<User>{
-    return this.http.get('http://localhost:61595/api/auth/GetUserToken?login=' + login + '&password=' + password)
+  getUserToken(login: string, passwordHash: string) : Observable<User>{
+    return this.http.get('http://localhost:61595/api/auth/GetUserToken?login=' + login + '&password=' + passwordHash)
                     .map(response => response.json());
   }
 }

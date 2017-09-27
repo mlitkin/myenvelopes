@@ -8,8 +8,8 @@
   </table>
 </md-toolbar>
 <md-menu #appMenu="mdMenu">
-  <button md-menu-item>Item1</button>
-  <button md-menu-item>Item2</button>
+  <button md-menu-item [routerLink]="['period-envelopes']">Текущий период</button>
+  <button md-menu-item>Планы</button>
 </md-menu>
 <router-outlet></router-outlet>
 <div id="errorOverlay">

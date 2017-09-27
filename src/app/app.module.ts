@@ -17,7 +17,7 @@ import { MdButtonModule,
 import { GlobalErrorHandler } from './global-error-handler';
 import { AuthGuard }   from './auth.guard';
 
-import {LoginService} from './services/login.service';
+import {UserService} from './services/user.service';
 import {HttpService} from './services/http.service';
 import {DialogService} from './services/dialog.service';
 import {ErrorService} from './services/error.service';
@@ -27,6 +27,7 @@ import { LoginComponent } from './login/login.component';
 import { PeriodEnvelopesComponent } from './period-envelopes/period-envelopes.component';
 import { HomeComponent } from './home/home.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 // определение маршрутов
 const appRoutes: Routes =[
@@ -61,7 +62,7 @@ const appRoutes: Routes =[
     MdToolbarModule,
     MdDialogModule
   ],
-  providers: [LoginService, AuthGuard, HttpService, DialogService, ErrorService,
+  providers: [UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService,
     {
       provide: ErrorHandler, 
       useClass: GlobalErrorHandler
