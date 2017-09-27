@@ -14,6 +14,10 @@
 <router-outlet></router-outlet>
 <div id="errorOverlay">
   <div id="errorOverlayBody">
-      <p>Content you want the user to see goes here.</p>
+      <h3>Ошибка</h3>
+      <p id="errorOverlayText"></p>
+      <div style="text-align: right">
+          <button md-raised-button onclick="document.getElementById('errorOverlay').style.visibility = 'hidden';">Закрыть</button>
+      </div>
   </div>
  </div>

@@ -7,12 +7,10 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./error-dialog.component.css']
 })
 export class ErrorDialogComponent {
-  public message: string;
 
   constructor(
     public dialogRef: MdDialogRef<ErrorDialogComponent>,
     @Inject(MD_DIALOG_DATA) 
     public data: any) { 
-      this.message = "aaa";
     }
 }

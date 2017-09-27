@@ -20,6 +20,7 @@ import { AuthGuard }   from './auth.guard';
 import {LoginService} from './services/login.service';
 import {HttpService} from './services/http.service';
 import {DialogService} from './services/dialog.service';
+import {ErrorService} from './services/error.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -60,7 +61,7 @@ const appRoutes: Routes =[
     MdToolbarModule,
     MdDialogModule
   ],
-  providers: [LoginService, AuthGuard, HttpService, DialogService,
+  providers: [LoginService, AuthGuard, HttpService, DialogService, ErrorService,
     {
       provide: ErrorHandler, 
       useClass: GlobalErrorHandler
