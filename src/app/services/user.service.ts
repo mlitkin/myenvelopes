@@ -4,6 +4,7 @@ import {HttpService} from './http.service';
 import {Md5} from 'ts-md5/dist/md5';
 import { Router } from '@angular/router';
 import {CookieService} from 'angular2-cookie/core';
+import { CookieOptionsArgs } from 'angular2-cookie/services';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,7 @@ export class UserService {
     this.user = new User();
     this.user.login = 'guest';
     this.user.role = UserRole.Public;
+    this.user.token = '';
    }
 
   isAuthenticated(): boolean {
@@ -29,8 +31,12 @@ export class UserService {
           this.user = data;
 
           //Сохраняем данные в куки.
-          this.cookieService.put('login', login);
-          this.cookieService.put('password', passwordHash);
+          var expireDate = new Date ();
+          expireDate.setDate(expireDate.getDate() + 90);
+          let opt: CookieOptionsArgs = { expires: expireDate };
+          
+          this.cookieService.put('login', login, opt);
+          this.cookieService.put('password', passwordHash, opt);
 
           this.router.navigate(['period-envelopes']);
         }

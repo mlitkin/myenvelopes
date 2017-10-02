@@ -3,7 +3,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Routes, RouterModule} from '@angular/router';
 import { FormsModule }   from '@angular/forms';
-import { HttpModule }   from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { MdButtonModule, 
   MdInputModule,
   MdCheckboxModule,
@@ -16,6 +16,7 @@ import { MdButtonModule,
 
 import { GlobalErrorHandler } from './global-error-handler';
 import { AuthGuard }   from './auth.guard';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import {UserService} from './services/user.service';
 import {HttpService} from './services/http.service';
@@ -28,6 +29,7 @@ import { PeriodEnvelopesComponent } from './period-envelopes/period-envelopes.co
 import { HomeComponent } from './home/home.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { MyInterceptor } from './my-interceptor';
 
 // определение маршрутов
 const appRoutes: Routes =[
@@ -52,7 +54,7 @@ const appRoutes: Routes =[
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     MdButtonModule, 
     MdInputModule,
     MdCheckboxModule,    
@@ -66,6 +68,11 @@ const appRoutes: Routes =[
     {
       provide: ErrorHandler, 
       useClass: GlobalErrorHandler
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyInterceptor,
+      multi: true,
     }],
   bootstrap: [AppComponent]
 })

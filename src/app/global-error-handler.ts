@@ -11,7 +11,7 @@ export class GlobalErrorHandler extends ErrorHandler {
   handleError(error) {
     //Получаем текст ошибки.
     const errorService = this.injector.get(ErrorService);
-    var message = errorService.getErrorMessage(error._body);
+    var message = errorService.getErrorMessage(error.error);
     if (!message) {
       message = error.message ? error.message : error.toString();
     }

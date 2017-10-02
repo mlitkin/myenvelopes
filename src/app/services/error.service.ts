@@ -9,6 +9,10 @@ export class ErrorService {
   getErrorMessage = function (obj: any) : string {
     let errorMessage = '';
 
+    if (!obj) {
+      return errorMessage;
+    }
+
     if (obj['IsError'] == true) {
         errorMessage = obj['ErrorMessage'];
     }
