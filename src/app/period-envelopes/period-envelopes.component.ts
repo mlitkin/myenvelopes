@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PrivateService } from '../services/private.service';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PeriodEnvelopesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private privateService: PrivateService) { }
 
   ngOnInit() {
+    this.privateService.getProjects().subscribe(
+      data => {
+        alert(data);
+      }
+    );
   }
 
 }

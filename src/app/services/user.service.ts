@@ -14,13 +14,13 @@ export class UserService {
 
   constructor(private httpService: HttpService, private cookieService: CookieService, private router: Router) {
     this.user = new User();
-    this.user.login = 'guest';
-    this.user.role = UserRole.Public;
-    this.user.token = '';
+    this.user.Login = 'guest';
+    this.user.Role = UserRole.Public;
+    this.user.Token = '';
    }
 
   isAuthenticated(): boolean {
-    return this.user && this.user.role != UserRole.Public;
+    return this.user && this.user.Role != UserRole.Public;
   }
 
   login(login: string, password: string) {

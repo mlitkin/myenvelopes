@@ -10,7 +10,7 @@ export class MyInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const userService = this.injector.get(UserService);
         if (userService.isAuthenticated()) {
-            const authReq = req.clone({headers: req.headers.set('Authorization', 'Basic ' + userService.user.token)});
+            const authReq = req.clone({headers: req.headers.set('Authorization', 'Basic ' + userService.user.Token)});
             return next.handle(authReq);
         }
 

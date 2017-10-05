@@ -1,11 +1,11 @@
 /** Пользовтель. */
 export class User {
     /**Логин. */
-    public login: string;
+    public Login: string;
     /**Токен. */
-    public token: string;
+    public Token: string;
     /**Роль. */
-    public role: UserRole;
+    public Role: UserRole;
 }
 
 /** Роль пользователя. */
