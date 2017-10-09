@@ -1,8 +1,17 @@
 /**Проект. */
 export class Project {
     /**Id. */
-    public id: number;
+    public Id: number;
 
     /**Наименование. */
-    public name: string;
+    public Name: string;
+
+    /**=true, если это основной проект. */
+    public IsDefault: boolean;
+
+    /**Начало периода. */
+    public PeriodStartDate: Date;
+
+    /**Окончание периода. */
+    public PeriodEndDate: Date;
 }

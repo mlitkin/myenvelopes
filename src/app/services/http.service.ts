@@ -7,12 +7,14 @@ import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { Project } from '../models/project';
 import { HttpHeaders } from '@angular/common/http';
+import { DateService } from './date.service';
+import { Envelope } from '../models/envelope';
 
 @Injectable()
 export class HttpService {
   private baseUrl = 'http://localhost:61595/api/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private dateService: DateService) { }
 
   getUserToken(login: string, passwordHash: string) : Observable<User>{
     return this.http.get<User>(this.baseUrl + 'auth/GetUserToken',
@@ -20,10 +22,32 @@ export class HttpService {
       params: new HttpParams()
         .set('login', login)
         .set('password', passwordHash),
-    });
+    })
+    .map(x => Object.assign(new User(), x));
   }
 
   getProjects() : Observable<Project[]>{
-    return this.http.get<Project[]>(this.baseUrl + 'private/GetProjectsTest');
+    return this.http.get<Project[]>(this.baseUrl + 'private/GetProjects',
+    {
+      params: new HttpParams()
+        .set('nowDate', this.dateService.getCurrentDateJson())
+    }).map(x => {
+      let result = new Array<Project>();
+      x.forEach(element => {
+        result.push(Object.assign(new Project(), element));
+      });
+
+      return result;
+    });
+  }
+
+  getEnvelopes(projectIds: number[], startDate: Date, endDate: Date) : Observable<Envelope[]>{
+    return this.http.get<Envelope[]>(this.baseUrl + 'private/GetProjectEnvelopes',
+    {
+      params: new HttpParams()
+        .set('ProjectIds', projectIds.toString())
+        .set('StartDate', this.dateService.getDateJson(startDate))
+        .set('EndDate', this.dateService.getDateJson(endDate))
+    });
   }
 }
