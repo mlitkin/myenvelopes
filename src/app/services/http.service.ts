@@ -22,8 +22,7 @@ export class HttpService {
       params: new HttpParams()
         .set('login', login)
         .set('password', passwordHash),
-    })
-    .map(x => Object.assign(new User(), x));
+    });
   }
 
   getProjects() : Observable<Project[]>{
@@ -31,13 +30,6 @@ export class HttpService {
     {
       params: new HttpParams()
         .set('nowDate', this.dateService.getCurrentDateJson())
-    }).map(x => {
-      let result = new Array<Project>();
-      x.forEach(element => {
-        result.push(Object.assign(new Project(), element));
-      });
-
-      return result;
     });
   }
 
