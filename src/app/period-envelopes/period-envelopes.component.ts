@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PrivateService } from '../services/private.service';
 import 'rxjs/add/operator/switchMap';
-import { List } from 'linqts';
 import { Project } from '../models/project';
+import { Envelope } from '../models/envelope';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -10,23 +11,24 @@ import { Project } from '../models/project';
   styleUrls: ['./period-envelopes.component.css']
 })
 export class PeriodEnvelopesComponent implements OnInit {
+  envelopes: Envelope[];
 
-  constructor(private privateService: PrivateService) { }
+  constructor(private privateService: PrivateService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.privateService.getProjects()
     .switchMap(projects => {
-      let project = new List<Project>(projects)
-      .Where(x => x.IsDefault)
-      .FirstOrDefault();
-
+      let project = projects.find(x => x.IsDefault);
       return this.privateService.getEnvelopes([ project.Id ], project.PeriodStartDate, project.PeriodEndDate);
     })
     .subscribe(
-      data => {
-        //alert(data);
+      envelopes => {
+        this.envelopes = envelopes;
       }
     );
   }
 
+  getEnvelopeBackground(imageUrl: string) {
+    return this.sanitizer.bypassSecurityTrustStyle(`url(${imageUrl})`);
+  }
 }

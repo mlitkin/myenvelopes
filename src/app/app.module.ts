@@ -4,6 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Routes, RouterModule} from '@angular/router';
 import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { MdButtonModule, 
   MdInputModule,
   MdCheckboxModule,
@@ -57,6 +59,7 @@ const appRoutes: Routes =[
     RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
+    FlexLayoutModule,
     MdButtonModule, 
     MdInputModule,
     MdCheckboxModule,    

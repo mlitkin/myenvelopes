@@ -1,3 +1,7 @@
 <p>
   period-envelopes works!
 </p>
+<div fxLayout fxLayout.xs="row" fxLayoutWrap>
+  <div *ngFor="let envelope of envelopes" class="envelopeImaged" 
+    [style.background-image]="getEnvelopeBackground(envelope.ImageUrl)"></div>
+</div>
