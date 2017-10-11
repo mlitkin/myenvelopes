@@ -1,5 +1,43 @@
 .envelopeImaged {
-    width: 282px;
     height: 200px;
+    margin-right: 3px; 
+    margin-bottom: 3px;
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.envelopeTop {
+    color: #ffffff;
+}
+
+.envelopeTop td {
+    padding: 3px 7px; 
+}
+
+.debetEnvelope {
+    background-color: rgba(71, 220, 22, 0.6) !important;
+}
+
+.externalEnvelope {
+    background-color: rgba(33, 33, 33, 0.6) !important;
+    color: #e4e4de !important;
+}
+
+.envelopeName {
+    width: 100%; 
+    background-color: rgba(62, 127, 182, 0.6);
+}
+
+.envelopeNameHidden {
+    width: 100%; 
+}
+
+.envelopeNameHidden div {
+    display: none;
+}
+
+.currentAmount {
+    font-size: 1.5em;
+    background-color: rgba(62, 127, 182, 0.6);
 }

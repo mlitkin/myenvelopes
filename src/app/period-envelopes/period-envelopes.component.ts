@@ -29,6 +29,42 @@ export class PeriodEnvelopesComponent implements OnInit {
   }
 
   getEnvelopeBackground(imageUrl: string) {
+    if (!imageUrl) {
+      imageUrl = '/assets/images/envelope.png';
+    }
+
     return this.sanitizer.bypassSecurityTrustStyle(`url(${imageUrl})`);
+  }
+
+  getEnvelopeNameClass(envelope: Envelope): string {
+    if (!envelope) {
+      return;
+    }
+
+    var addClass = '';
+
+    if (envelope.IsDebet) {
+        addClass = 'debetEnvelope';
+    } else {
+        if (envelope.IsExternalCurrentAmount) {
+            addClass = 'externalEnvelope';
+        }
+    }
+
+    return true /*viewSettings.AlwaysShowEnvelopeNames || scope.isMouseOver || !scope.envelope.ImageUrl*/
+        ? 'envelopeName ' + addClass
+        : 'envelopeNameHidden';
+  }
+
+  getEnvelopeCurrentAmountClass(envelope: Envelope): string {
+    if (!envelope) {
+        return;
+    }
+
+    if (envelope.IsExternalCurrentAmount) {
+        return 'externalEnvelope';
+    }
+
+    return envelope.IsDebet ? 'debetEnvelope' : '';
   }
 }

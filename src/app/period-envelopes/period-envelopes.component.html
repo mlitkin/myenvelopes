@@ -1,7 +1,16 @@
-<p>
-  period-envelopes works!
-</p>
-<div fxLayout fxLayout.xs="row" fxLayoutWrap>
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap>
   <div *ngFor="let envelope of envelopes" class="envelopeImaged" 
-    [style.background-image]="getEnvelopeBackground(envelope.ImageUrl)"></div>
+    [style.background-image]="getEnvelopeBackground(envelope.ImageUrl)"
+    fxFlex="282px" fxFlex.xs="200px">
+    <table class="envelopeTop">
+      <tr>
+          <td [ngClass]="getEnvelopeNameClass(envelope)">
+              <div>{{ envelope.Name }}</div>
+          </td>
+          <td class="currentAmount" [ngClass]="getEnvelopeCurrentAmountClass(envelope)" *ngIf="envelope.CurrentAmount">
+              <b>{{ envelope.CurrentAmount }}</b>
+          </td>
+      </tr>
+  </table>
+</div>
 </div>
