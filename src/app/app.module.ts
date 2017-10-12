@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, LOCALE_ID } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Routes, RouterModule} from '@angular/router';
 import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DecimalPipe } from '@angular/common';
 
 import { MdButtonModule, 
   MdInputModule,
@@ -34,6 +35,7 @@ import { HomeComponent } from './home/home.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { MyInterceptor } from './my-interceptor';
+import { MoneyPipe } from './pipes/money.pipe';
 
 // определение маршрутов
 const appRoutes: Routes =[
@@ -48,7 +50,8 @@ const appRoutes: Routes =[
     LoginComponent,
     PeriodEnvelopesComponent,
     HomeComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    MoneyPipe
   ],
   entryComponents: [
     ErrorDialogComponent
@@ -69,7 +72,8 @@ const appRoutes: Routes =[
     MdToolbarModule,
     MdDialogModule
   ],
-  providers: [UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
+  providers: [ DecimalPipe,
+    UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
     DateService,
     {
       provide: ErrorHandler, 
@@ -79,6 +83,10 @@ const appRoutes: Routes =[
       provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
       multi: true,
+    },
+    { 
+      provide: LOCALE_ID,
+      useValue: "ru-RU"
     }],
   bootstrap: [AppComponent]
 })

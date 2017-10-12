@@ -67,4 +67,10 @@ export class PeriodEnvelopesComponent implements OnInit {
 
     return envelope.IsDebet ? 'debetEnvelope' : '';
   }
+
+  getCompletePercent(envelope: Envelope): string {
+    return envelope.TargetAmount
+      ? Math.round((envelope.CurrentAmount / envelope.TargetAmount) * 100).toString() + '%'
+      : '';
+  }
 }

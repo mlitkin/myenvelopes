@@ -2,15 +2,25 @@
   <div *ngFor="let envelope of envelopes" class="envelopeImaged" 
     [style.background-image]="getEnvelopeBackground(envelope.ImageUrl)"
     fxFlex="282px" fxFlex.xs="200px">
-    <table class="envelopeTop">
-      <tr>
-          <td [ngClass]="getEnvelopeNameClass(envelope)">
-              <div>{{ envelope.Name }}</div>
-          </td>
-          <td class="currentAmount" [ngClass]="getEnvelopeCurrentAmountClass(envelope)" *ngIf="envelope.CurrentAmount">
-              <b>{{ envelope.CurrentAmount }}</b>
-          </td>
-      </tr>
-  </table>
-</div>
+    <div fxLayout="column" fxLayoutAlign="space-between stretch" style="height: 100%">
+        <table class="envelopeTop">
+            <tr>
+                <td [ngClass]="getEnvelopeNameClass(envelope)">
+                    <div>{{ envelope.Name }}</div>
+                </td>
+                <td class="currentAmount" [ngClass]="getEnvelopeCurrentAmountClass(envelope)" *ngIf="envelope.CurrentAmount">
+                    <b>{{ envelope.CurrentAmount | money }}</b>
+                </td>
+            </tr>
+        </table>
+
+        <div *ngIf="envelope.TargetAmount" class="completePercent" fxFlexAlign="center">
+            <span title="Необходимая сумма - {{ envelope.TargetAmount | money }}">{{ getCompletePercent(envelope) }}</span>
+        </div>
+
+        <div fxFlex="27px" style="background-color: red">
+            Низ
+        </div>
+    </div>
+  </div>
 </div>
