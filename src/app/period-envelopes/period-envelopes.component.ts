@@ -23,6 +23,13 @@ export class PeriodEnvelopesComponent implements OnInit {
     })
     .subscribe(
       envelopes => {
+        envelopes.forEach(env => {
+          env.background = this.getEnvelopeBackground(env.ImageUrl);
+          env.nameClass = this.getEnvelopeNameClass(env);
+          env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
+          env.completePercentStr = this.getCompletePercent(env);
+        });
+
         this.envelopes = envelopes;
       }
     );

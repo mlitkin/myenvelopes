@@ -1,3 +1,5 @@
+import { SafeStyle } from "@angular/platform-browser";
+
 /**Конверт. */
 export class Envelope {
     /**Id. */
@@ -32,4 +34,11 @@ export class Envelope {
 
     /**Url изображения. */
     public ImageUrl: string;
+
+    //ViewModel
+
+    public background: SafeStyle;
+    public nameClass: string;
+    public currentAmountClass: string;
+    public completePercentStr: string;
 }
