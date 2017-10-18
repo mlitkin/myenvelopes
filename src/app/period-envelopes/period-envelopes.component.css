@@ -38,14 +38,38 @@
 }
 
 .currentAmount {
-    font-size: 1.5em;
+    font-size: 1.5rem;
     background-color: rgba(62, 127, 182, 0.6);
 }
 
 .completePercent span {
     padding: 5px 7px;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #3e7fb6;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+.envelopePlan, .envelopePlanInDebet, .envelopePlanOut, .envelopePlansSum {
+    color: white;
+    padding: 3px 5px; 
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.envelopePlan {
+    background-color: rgba(254, 199, 9, 0.8);
+}
+
+.envelopePlanInDebet {
+    background-color: rgba(71, 220, 22, 0.8);
+}
+
+.envelopePlanOut {
+    background-color: rgba(249, 100, 99, 0.8);
+}
+
+.planDate {
+    color: black;
+    font-weight: normal;
 }

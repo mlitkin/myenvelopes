@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import { Project } from '../models/project';
 import { Envelope } from '../models/envelope';
 import { DomSanitizer } from '@angular/platform-browser';
+import { EnvelopePlan } from '../models/envelope-plan';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -17,22 +18,33 @@ export class PeriodEnvelopesComponent implements OnInit {
 
   ngOnInit() {
     this.privateService.getProjects()
-    .switchMap(projects => {
-      let project = projects.find(x => x.IsDefault);
-      return this.privateService.getEnvelopes([ project.Id ], project.PeriodStartDate, project.PeriodEndDate);
-    })
-    .subscribe(
+      .switchMap(projects => {
+        let project = projects.find(x => x.IsDefault);
+        return this.privateService.getEnvelopes([project.Id], project.PeriodStartDate, project.PeriodEndDate);
+      })
+      .subscribe(
       envelopes => {
         envelopes.forEach(env => {
           env.background = this.getEnvelopeBackground(env.ImageUrl);
           env.nameClass = this.getEnvelopeNameClass(env);
           env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
           env.completePercentStr = this.getCompletePercent(env);
+
+          env.Plans.forEach(plan => {
+            if (!env.firstPlanIn && plan.IsIncoming) {
+              env.firstPlanIn = plan;
+            }
+            if (!env.firstPlanOut && !plan.IsIncoming) {
+              env.firstPlanOut = plan;
+            }
+
+            plan.cssClass = this.getEnvelopePlanSumClass(env, plan);
+          });
         });
 
         this.envelopes = envelopes;
       }
-    );
+      );
   }
 
   getEnvelopeBackground(imageUrl: string) {
@@ -44,32 +56,24 @@ export class PeriodEnvelopesComponent implements OnInit {
   }
 
   getEnvelopeNameClass(envelope: Envelope): string {
-    if (!envelope) {
-      return;
-    }
-
     var addClass = '';
 
     if (envelope.IsDebet) {
-        addClass = 'debetEnvelope';
+      addClass = 'debetEnvelope';
     } else {
-        if (envelope.IsExternalCurrentAmount) {
-            addClass = 'externalEnvelope';
-        }
+      if (envelope.IsExternalCurrentAmount) {
+        addClass = 'externalEnvelope';
+      }
     }
 
     return true /*viewSettings.AlwaysShowEnvelopeNames || scope.isMouseOver || !scope.envelope.ImageUrl*/
-        ? 'envelopeName ' + addClass
-        : 'envelopeNameHidden';
+      ? 'envelopeName ' + addClass
+      : 'envelopeNameHidden';
   }
 
   getEnvelopeCurrentAmountClass(envelope: Envelope): string {
-    if (!envelope) {
-        return;
-    }
-
     if (envelope.IsExternalCurrentAmount) {
-        return 'externalEnvelope';
+      return 'externalEnvelope';
     }
 
     return envelope.IsDebet ? 'debetEnvelope' : '';
@@ -79,5 +83,13 @@ export class PeriodEnvelopesComponent implements OnInit {
     return envelope.TargetAmount
       ? Math.round((envelope.CurrentAmount / envelope.TargetAmount) * 100).toString() + '%'
       : '';
+  }
+
+  getEnvelopePlanSumClass(envelope: Envelope, plan: EnvelopePlan) {
+    if (envelope.IsDebet && plan.IsIncoming) {
+      return 'envelopePlanInDebet';
+    }
+
+    return plan.IsIncoming ? 'envelopePlan' : 'envelopePlanOut';
   }
 }

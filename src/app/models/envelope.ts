@@ -1,4 +1,5 @@
 import { SafeStyle } from "@angular/platform-browser";
+import { EnvelopePlan } from "./envelope-plan";
 
 /**Конверт. */
 export class Envelope {
@@ -35,10 +36,15 @@ export class Envelope {
     /**Url изображения. */
     public ImageUrl: string;
 
+    /**Список планов. */
+    public Plans: EnvelopePlan[];
+
     //ViewModel
 
     public background: SafeStyle;
     public nameClass: string;
     public currentAmountClass: string;
     public completePercentStr: string;
+    public firstPlanIn: EnvelopePlan;
+    public firstPlanOut: EnvelopePlan;
 }
