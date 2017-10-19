@@ -92,4 +92,18 @@ export class PeriodEnvelopesComponent implements OnInit {
 
     return plan.IsIncoming ? 'envelopePlan' : 'envelopePlanOut';
   }
+
+  showHideAllPlans(envelope: Envelope, plan: EnvelopePlan) {
+    if (envelope.allPlansForShow) {
+      envelope.allPlansForShow = null;
+      return;
+    }
+
+    envelope.allPlansAlign = plan.IsIncoming ? "start stretch" : "end stretch";
+    envelope.allPlansForShow = envelope.Plans.filter(x => x.IsIncoming == plan.IsIncoming); 
+
+    let plansSum = 0;
+    envelope.allPlansForShow.forEach(x => plansSum = plansSum + x.PlanAmount);
+    envelope.allPlansSum = plansSum;
+  }
 }

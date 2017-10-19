@@ -47,4 +47,7 @@ export class Envelope {
     public completePercentStr: string;
     public firstPlanIn: EnvelopePlan;
     public firstPlanOut: EnvelopePlan;
+    public allPlansForShow: EnvelopePlan[];
+    public allPlansAlign: string;
+    public allPlansSum: number;
 }

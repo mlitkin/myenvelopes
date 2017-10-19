@@ -5,6 +5,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: scroll;
 }
 
 .envelopeTop {
@@ -72,4 +73,9 @@
 .planDate {
     color: black;
     font-weight: normal;
+}
+
+.envelopePlansSum {
+    color: black;
+    background-color: rgba(255, 255, 255, 0.8);
 }

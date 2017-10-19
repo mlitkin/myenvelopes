@@ -17,18 +17,41 @@
                 <span title="Необходимая сумма - {{ envelope.TargetAmount | money }}">{{ envelope.completePercentStr }}</span>
             </div>
 
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-                <div [ngClass]="envelope.firstPlanIn.cssClass" *ngIf="envelope.firstPlanIn">
-                    <span class="planDate">
-                        {{ envelope.firstPlanIn.ActionDate | date:'dd.MM' }}:
-                    </span>+{{ envelope.firstPlanIn.PlanAmount | money }}
-                </div>
-                <div [ngClass]="envelope.firstPlanOut.cssClass" *ngIf="envelope.firstPlanOut">
-                        <span class="planDate">
-                            {{ envelope.firstPlanOut.ActionDate | date:'dd.MM' }}:
-                        </span>-{{ envelope.firstPlanOut.PlanAmount | money }}
+            <div>
+                <div *ngIf="envelope.allPlansForShow">
+                    <div fxLayout="row" fxLayoutWrap fxLayoutAlign="{{ envelope.allPlansAlign }}">
+                        <div *ngFor="let plan of envelope.allPlansForShow" [ngClass]="plan.cssClass">
+                            <span class="planDate">
+                                {{ plan.ActionDate | date:'dd.MM' }}:
+                            </span>{{ plan.PlanAmount | money }}
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="{{ envelope.allPlansAlign }}">
+                        <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)" class="envelopePlansSum">
+                            <span class="planDate">
+                                Всего:
+                            </span>{{ envelope.allPlansSum | money }}
+                        </div>
                     </div>
                 </div>
+
+                <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!envelope.allPlansForShow">
+                    <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)">
+                        <div *ngIf="envelope.firstPlanIn" [ngClass]="envelope.firstPlanIn.cssClass">
+                            <span class="planDate">
+                                {{ envelope.firstPlanIn.ActionDate | date:'dd.MM' }}:
+                            </span>+{{ envelope.firstPlanIn.PlanAmount | money }}
+                        </div>
+                    </div>
+                    <div (click)="showHideAllPlans(envelope, envelope.firstPlanOut)">
+                        <div *ngIf="envelope.firstPlanOut" [ngClass]="envelope.firstPlanOut.cssClass">
+                            <span class="planDate">
+                                {{ envelope.firstPlanOut.ActionDate | date:'dd.MM' }}:
+                            </span>-{{ envelope.firstPlanOut.PlanAmount | money }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
