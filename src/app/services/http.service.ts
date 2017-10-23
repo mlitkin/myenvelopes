@@ -26,7 +26,7 @@ export class HttpService {
   }
 
   getProjects() : Observable<Project[]>{
-    return this.http.get<Project[]>(this.baseUrl + 'private/GetProjects',
+    return this.http.get<Project[]>(this.baseUrl + 'private2/GetProjects',
     {
       params: new HttpParams()
         .set('nowDate', this.dateService.getCurrentDateJson())
@@ -34,7 +34,7 @@ export class HttpService {
   }
 
   getEnvelopes(projectIds: number[], startDate: Date, endDate: Date) : Observable<Envelope[]>{
-    return this.http.get<Envelope[]>(this.baseUrl + 'private/GetProjectEnvelopes',
+    return this.http.get<Envelope[]>(this.baseUrl + 'private2/GetProjectEnvelopes',
     {
       params: new HttpParams()
         .set('ProjectIds', projectIds.toString())

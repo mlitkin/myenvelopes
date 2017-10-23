@@ -22,8 +22,7 @@ export class PeriodEnvelopesComponent implements OnInit {
         let project = projects.find(x => x.IsDefault);
         return this.privateService.getEnvelopes([project.Id], project.PeriodStartDate, project.PeriodEndDate);
       })
-      .subscribe(
-      envelopes => {
+      .subscribe(envelopes => {
         envelopes.forEach(env => {
           env.background = this.getEnvelopeBackground(env.ImageUrl);
           env.nameClass = this.getEnvelopeNameClass(env);
@@ -43,8 +42,7 @@ export class PeriodEnvelopesComponent implements OnInit {
         });
 
         this.envelopes = envelopes;
-      }
-      );
+      });
   }
 
   getEnvelopeBackground(imageUrl: string) {
