@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'error-dialog',
@@ -9,8 +9,8 @@ import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
 export class ErrorDialogComponent {
 
   constructor(
-    public dialogRef: MdDialogRef<ErrorDialogComponent>,
-    @Inject(MD_DIALOG_DATA) 
+    public dialogRef: MatDialogRef<ErrorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) 
     public data: any) { 
     }
 }

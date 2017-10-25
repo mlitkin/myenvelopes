@@ -7,15 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DecimalPipe } from '@angular/common';
 
-import { MdButtonModule, 
-  MdInputModule,
-  MdCheckboxModule,
-  MdIconModule,
-  MdMenuModule,
-  MdCardModule,
-  MdToolbarModule,
-  MdDialogModule
+import { MatButtonModule, 
+  MatInputModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatMenuModule,
+  MatCardModule,
+  MatToolbarModule,
+  MatDialogModule
  } from '@angular/material';
+import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
 import { GlobalErrorHandler } from './global-error-handler';
 import { AuthGuard }   from './auth.guard';
@@ -63,14 +64,14 @@ const appRoutes: Routes =[
     FormsModule,
     HttpClientModule,
     FlexLayoutModule,
-    MdButtonModule, 
-    MdInputModule,
-    MdCheckboxModule,    
-    MdIconModule,
-    MdMenuModule,
-    MdCardModule,
-    MdToolbarModule,
-    MdDialogModule
+    MatButtonModule, 
+    MatInputModule,
+    MatCheckboxModule,    
+    MatIconModule,
+    MatMenuModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatDialogModule
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
@@ -87,6 +88,10 @@ const appRoutes: Routes =[
     { 
       provide: LOCALE_ID,
       useValue: "ru-RU"
+    },
+    {
+      provide: MATERIAL_COMPATIBILITY_MODE, 
+      useValue: true
     }],
   bootstrap: [AppComponent]
 })

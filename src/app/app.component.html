@@ -1,23 +1,23 @@
-<md-toolbar color="accent">
+<mat-toolbar color="accent">
   <table id="header">
     <tr>
       <td><span>Конверты</span></td>
       <td style="width: 100%"></td>
-      <td><button id="menuButton" md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon></button></td>
+      <td><button id="menuButton" mat-button [matMenuTriggerFor]="appMenu"><mat-icon>menu</mat-icon></button></td>
     </tr>
   </table>
-</md-toolbar>
-<md-menu #appMenu="mdMenu">
-  <button md-menu-item [routerLink]="['period-envelopes']">Текущий период</button>
-  <button md-menu-item>Планы</button>
-</md-menu>
+</mat-toolbar>
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item [routerLink]="['period-envelopes']">Текущий период</button>
+  <button mat-menu-item>Планы</button>
+</mat-menu>
 <router-outlet></router-outlet>
 <div id="errorOverlay">
   <div id="errorOverlayBody">
       <h3>Ошибка</h3>
       <p id="errorOverlayText"></p>
       <div style="text-align: right">
-          <button md-raised-button onclick="document.getElementById('errorOverlay').style.visibility = 'hidden';">Закрыть</button>
+          <button mat-raised-button onclick="document.getElementById('errorOverlay').style.visibility = 'hidden';">Закрыть</button>
       </div>
   </div>
  </div>

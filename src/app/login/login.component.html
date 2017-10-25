@@ -1,15 +1,15 @@
 <form #loginForm="ngForm">
     <div>
-        <md-form-field>
-            <input mdInput placeholder="Логин" name="login" [(ngModel)]="login" required>
-        </md-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Логин" name="login" [(ngModel)]="login" required>
+        </mat-form-field>
     </div>
     <div>
-        <md-form-field>
-            <input mdInput placeholder="Пароль" name="password" [(ngModel)]="password" required>
-        </md-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Пароль" name="password" [(ngModel)]="password" required>
+        </mat-form-field>
     </div>
     <div>
-        <button md-raised-button color="accent" [disabled]="loginForm.invalid" (click)="submit(loginForm)">Войти</button>
+        <button mat-raised-button color="accent" [disabled]="loginForm.invalid" (click)="submit(loginForm)">Войти</button>
     </div>
 </form>
