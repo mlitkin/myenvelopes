@@ -14,7 +14,9 @@ import { MatButtonModule,
   MatMenuModule,
   MatCardModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSelectModule,
+  MatExpansionModule
  } from '@angular/material';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
@@ -71,7 +73,9 @@ const appRoutes: Routes =[
     MatMenuModule,
     MatCardModule,
     MatToolbarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
