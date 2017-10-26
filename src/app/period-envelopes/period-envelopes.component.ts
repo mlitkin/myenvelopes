@@ -12,14 +12,21 @@ import { EnvelopePlan } from '../models/envelope-plan';
   styleUrls: ['./period-envelopes.component.css']
 })
 export class PeriodEnvelopesComponent implements OnInit {
+  projects: Project[];
+  selectedProject: Project = new Project();
   envelopes: Envelope[];
+  balanceCssClass: string;
 
   constructor(private privateService: PrivateService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    this.balanceCssClass = "freeSumHigh";
     this.privateService.getProjects()
       .switchMap(projects => {
         let project = projects.find(x => x.IsDefault);
+        this.projects = projects;
+        this.selectedProject = project;
+
         return this.privateService.getEnvelopes([project.Id], project.PeriodStartDate, project.PeriodEndDate);
       })
       .subscribe(envelopes => {

@@ -79,3 +79,24 @@
     color: black;
     background-color: rgba(255, 255, 255, 0.8);
 }
+
+#balance {
+    margin-bottom: 10px;
+}
+
+.freeSumHigh {
+    background-color: #a6f28d;
+}
+
+.freeSumMedium {
+    background-color: #fee670;
+}
+
+.freeSumLow {
+    background-color: #fcbaab;
+}
+
+#balanceSum {
+    font-size: 1.2rem;
+    font-weight: bold;   
+}

@@ -11,7 +11,9 @@
   <button mat-menu-item [routerLink]="['period-envelopes']">Текущий период</button>
   <button mat-menu-item>Планы</button>
 </mat-menu>
-<router-outlet></router-outlet>
+<div style="margin-top: 10px">
+  <router-outlet></router-outlet>
+</div>
 <div id="errorOverlay">
   <div id="errorOverlayBody">
       <h3>Ошибка</h3>

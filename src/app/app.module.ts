@@ -16,7 +16,9 @@ import { MatButtonModule,
   MatToolbarModule,
   MatDialogModule,
   MatSelectModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatDatepickerModule,
+  MatNativeDateModule
  } from '@angular/material';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
@@ -75,7 +77,9 @@ const appRoutes: Routes =[
     MatToolbarModule,
     MatDialogModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
