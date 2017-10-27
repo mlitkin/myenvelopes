@@ -45,6 +45,7 @@ export class Envelope {
     public nameClass: string;
     public currentAmountClass: string;
     public completePercentStr: string;
+    public firstPlan: EnvelopePlan;
     public firstPlanIn: EnvelopePlan;
     public firstPlanOut: EnvelopePlan;
     public allPlansForShow: EnvelopePlan[];

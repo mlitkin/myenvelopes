@@ -5,7 +5,7 @@ export class DateService {
 
   constructor() { }
 
-  getDateFormated = function (date: Date) {
+  getDateFormated(date: Date): string {
     date = new Date(date);
 
     var day = ('0' + date.getDate()).slice(-2);
@@ -15,18 +15,29 @@ export class DateService {
     return year + '-' + month + '-' + day;
   }
 
-  getDateJson = function (date: Date) {
+  getDateJson(date: Date): string {
     return this.getDateFormated(date);
   }
 
-  getCurrentDate = function () {
+  getCurrentDate(): Date {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
     return today;
   }
 
-  getCurrentDateJson = function () {
+  getCurrentDateJson(): string {
     return this.getDateJson(this.getCurrentDate());
+  }
+
+  getDateObject(dt: any): Date {
+    if ((typeof dt) == 'object') {
+      return dt;
+    }
+
+    var res = new Date(dt);
+    res.setHours(0, 0, 0, 0);
+
+    return res;
   }
 }

@@ -5,6 +5,8 @@ import { Project } from '../models/project';
 import { Envelope } from '../models/envelope';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EnvelopePlan } from '../models/envelope-plan';
+import * as _ from 'underscore';
+import { DateService } from '../services/date.service';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -17,7 +19,8 @@ export class PeriodEnvelopesComponent implements OnInit {
   envelopes: Envelope[];
   balanceCssClass: string;
 
-  constructor(private privateService: PrivateService, private sanitizer: DomSanitizer) { }
+  constructor(private privateService: PrivateService, private dateService: DateService,
+    private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.balanceCssClass = "freeSumHigh";
@@ -30,26 +33,72 @@ export class PeriodEnvelopesComponent implements OnInit {
         return this.privateService.getEnvelopes([project.Id], project.PeriodStartDate, project.PeriodEndDate);
       })
       .subscribe(envelopes => {
-        envelopes.forEach(env => {
-          env.background = this.getEnvelopeBackground(env.ImageUrl);
-          env.nameClass = this.getEnvelopeNameClass(env);
-          env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
-          env.completePercentStr = this.getCompletePercent(env);
-
-          env.Plans.forEach(plan => {
-            if (!env.firstPlanIn && plan.IsIncoming) {
-              env.firstPlanIn = plan;
-            }
-            if (!env.firstPlanOut && !plan.IsIncoming) {
-              env.firstPlanOut = plan;
-            }
-
-            plan.cssClass = this.getEnvelopePlanSumClass(env, plan);
-          });
-        });
-
-        this.envelopes = envelopes;
+        envelopes.forEach(x => this.fillEnvelopeViewModel(x));
+        this.envelopes = this.getSortedEnvelopes(envelopes);
       });
+  }
+
+  fillEnvelopeViewModel(env: Envelope) {
+    env.background = this.getEnvelopeBackground(env.ImageUrl);
+    env.nameClass = this.getEnvelopeNameClass(env);
+    env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
+    env.completePercentStr = this.getCompletePercent(env);
+
+    env.Plans.forEach(plan => this.fillEnvelopePlanViewModel(env, plan));
+  }
+
+  fillEnvelopePlanViewModel(env: Envelope, plan: EnvelopePlan) {
+    plan.ActionDate = this.dateService.getDateObject(plan.ActionDate);
+
+    if (!env.firstPlan) {
+      env.firstPlan = plan;
+    }
+    if (!env.firstPlanIn && plan.IsIncoming) {
+      env.firstPlanIn = plan;
+    }
+    if (!env.firstPlanOut && !plan.IsIncoming) {
+      env.firstPlanOut = plan;
+    }
+
+    plan.cssClass = this.getEnvelopePlanSumClass(env, plan);
+  }
+
+  getSortedEnvelopes(envelopes: Envelope[]) {
+    let futureDate = new Date();
+    futureDate.setFullYear(futureDate.getFullYear() + 100);
+    return envelopes.sort((a, b) => this.sortEnvelopesComparer(a, b, futureDate));
+  }
+
+  sortEnvelopesComparer(a: Envelope, b: Envelope, futureDate: Date): number {
+    //По минимальной дате плана.
+    let minPlanDate1 = a.firstPlan ? a.firstPlan.ActionDate : futureDate;
+    let minPlanDate2 = b.firstPlan ? b.firstPlan.ActionDate : futureDate;
+    if (minPlanDate1 > minPlanDate2) {
+      return 1;
+    }
+    if (minPlanDate1 < minPlanDate2) {
+      return -1;
+    }
+
+    //По сумме первого плана (desc).
+    let planAmount1 = a.firstPlan ? a.firstPlan.PlanAmount : 0;
+    let planAmount2 = b.firstPlan ? b.firstPlan.PlanAmount : 0;
+    if (planAmount1 > planAmount2) {
+      return -1;
+    }
+    if (planAmount1 < planAmount2) {
+      return 1;
+    }
+
+    //По текущей сумме (desc).
+    if (a.CurrentAmount > b.CurrentAmount) {
+      return -1;
+    }
+    if (a.CurrentAmount < b.CurrentAmount) {
+      return 1;
+    }
+
+    return 0;
   }
 
   getEnvelopeBackground(imageUrl: string) {
@@ -105,7 +154,7 @@ export class PeriodEnvelopesComponent implements OnInit {
     }
 
     envelope.allPlansAlign = plan.IsIncoming ? "start stretch" : "end stretch";
-    envelope.allPlansForShow = envelope.Plans.filter(x => x.IsIncoming == plan.IsIncoming); 
+    envelope.allPlansForShow = envelope.Plans.filter(x => x.IsIncoming == plan.IsIncoming);
 
     let plansSum = 0;
     envelope.allPlansForShow.forEach(x => plansSum = plansSum + x.PlanAmount);
