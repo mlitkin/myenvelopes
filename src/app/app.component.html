@@ -9,7 +9,7 @@
 </mat-toolbar>
 <mat-menu #appMenu="matMenu">
   <button mat-menu-item [routerLink]="['period-envelopes']">Текущий период</button>
-  <button mat-menu-item>Планы</button>
+  <button mat-menu-item [routerLink]="['envelope-plans']">Планы</button>
 </mat-menu>
 <div style="margin-top: 10px">
   <router-outlet></router-outlet>

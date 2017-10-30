@@ -1,100 +1,108 @@
 <div id="balance">
-        <mat-expansion-panel #balancePanel [ngClass]="balanceCssClass">
-            <mat-expansion-panel-header>
-                <mat-panel-description>
-                    <div fxLayout="row" fxLayoutWrap fxLayoutAlign="space-between center" style="width: 100%">
-                        <div *ngIf="balancePanel.expanded">
-                            <b>Баланс периода</b>
-                        </div>
-                        <div *ngIf="!balancePanel.expanded">
-                            {{ selectedProject.PeriodStartDate | date }} - {{ selectedProject.PeriodEndDate | date }}
-                        </div>
-                        <div id="balanceSum">
-                            {{ 10000 | money }}
+    <mat-expansion-panel #balancePanel [ngClass]="balanceCssClass">
+        <mat-expansion-panel-header>
+            <mat-panel-description>
+                <div fxLayout="row" fxLayoutWrap fxLayoutAlign="space-between center" style="width: 100%">
+                    <div *ngIf="balancePanel.expanded">
+                        <b>Баланс периода</b>
+                    </div>
+                    <div *ngIf="!balancePanel.expanded">
+                        {{ selectedProject.PeriodStartDate | date }} - {{ selectedProject.PeriodEndDate | date }}
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="10px">
+                        <div class="balanceSum" *ngFor="let balanceValue of balanceValuesInHeader">
+                            <div class="balancePlaceholder">{{ balanceValue.name }}</div>
+                            <div>{{ balanceValue.amount | money }}</div>
                         </div>
                     </div>
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-    
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="row" fxLayoutWrap fxLayoutAlign="start stretch" fxLayoutGap="10px">
             <div>
-                <div>
-                    <mat-form-field style="width: 245px">
-                        <mat-select placeholder="Проект" [(ngModel)]="selectedProject">
-                            <mat-option *ngFor="let project of projects" [value]="project">{{ project.Name }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field style="width: 120px">
-                        <input matInput [matDatepicker]="dpPeriodStart" placeholder="Начало периода" [(ngModel)]="selectedProject.PeriodStartDate">
-                        <mat-datepicker-toggle matSuffix [for]="dpPeriodStart"></mat-datepicker-toggle>
-                        <mat-datepicker #dpPeriodStart [touchUi]="true"></mat-datepicker>
-                    </mat-form-field>
-                    <mat-form-field style="width: 120px">
-                        <input matInput [matDatepicker]="dpPeriodEnd" placeholder="Окончание периода" [(ngModel)]="selectedProject.PeriodEndDate">
-                        <mat-datepicker-toggle matSuffix [for]="dpPeriodEnd"></mat-datepicker-toggle>
-                        <mat-datepicker #dpPeriodEnd [touchUi]="true"></mat-datepicker>
-                    </mat-form-field>
-                </div>
+                <mat-form-field style="width: 245px">
+                    <mat-select placeholder="Проект" [(ngModel)]="selectedProject">
+                        <mat-option *ngFor="let project of projects" [value]="project">{{ project.Name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-    
-        </mat-expansion-panel>
-    </div>
-    
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap>
-        <div *ngFor="let envelope of envelopes" class="envelopeImaged" [style.background-image]="envelope.background" fxFlex="282px"
-            fxFlex.xs="200px">
-            <div fxLayout="column" fxLayoutAlign="space-between stretch" style="height: 100%">
-                <table class="envelopeTop">
-                    <tr>
-                        <td [ngClass]="envelope.nameClass">
-                            <div>{{ envelope.Name }}</div>
-                        </td>
-                        <td class="currentAmount" [ngClass]="envelope.currentAmountClass" *ngIf="envelope.CurrentAmount">
-                            <b>{{ envelope.CurrentAmount | money }}</b>
-                        </td>
-                    </tr>
-                </table>
-    
-                <div *ngIf="envelope.TargetAmount" class="completePercent" fxFlexAlign="center">
-                    <span title="Необходимая сумма - {{ envelope.TargetAmount | money }}">{{ envelope.completePercentStr }}</span>
-                </div>
-    
-                <div>
-                    <div *ngIf="envelope.allPlansForShow">
-                        <div fxLayout="row" fxLayoutWrap fxLayoutAlign="{{ envelope.allPlansAlign }}">
-                            <div *ngFor="let plan of envelope.allPlansForShow" [ngClass]="plan.cssClass">
-                                <span class="planDate">
-                                    {{ plan.ActionDate | date:'dd.MM' }}:
-                                </span>{{ plan.PlanAmount | money }}
-                            </div>
-                        </div>
-                        <div fxLayout="row" fxLayoutAlign="{{ envelope.allPlansAlign }}">
-                            <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)" class="envelopePlansSum">
-                                <span class="planDate">
-                                    Всего:
-                                </span>{{ envelope.allPlansSum | money }}
-                            </div>
+            <div>
+                <mat-form-field style="width: 120px">
+                    <input matInput [matDatepicker]="dpPeriodStart" placeholder="Начало периода" [(ngModel)]="selectedProject.PeriodStartDate">
+                    <mat-datepicker-toggle matSuffix [for]="dpPeriodStart"></mat-datepicker-toggle>
+                    <mat-datepicker #dpPeriodStart [touchUi]="true"></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field style="width: 120px">
+                    <input matInput [matDatepicker]="dpPeriodEnd" placeholder="Окончание периода" [(ngModel)]="selectedProject.PeriodEndDate">
+                    <mat-datepicker-toggle matSuffix [for]="dpPeriodEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #dpPeriodEnd [touchUi]="true"></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div id="balanceStatistic" fxLayout="row" fxLayoutWrap fxLayoutAlign="start stretch">
+            <div class="balanceSum" *ngFor="let balanceValue of balanceValues">
+                <div class="balancePlaceholder">{{ balanceValue.name }}</div>
+                <div>{{ balanceValue.amount | money }}</div>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</div>
+
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap>
+    <div *ngFor="let envelope of envelopes" class="envelopeImaged" [style.background-image]="envelope.background" fxFlex="282px"
+        fxFlex.xs="200px">
+        <div fxLayout="column" fxLayoutAlign="space-between stretch" style="height: 100%">
+            <table class="envelopeTop">
+                <tr>
+                    <td [ngClass]="envelope.nameClass">
+                        <div>{{ envelope.Name }}</div>
+                    </td>
+                    <td class="currentAmount" [ngClass]="envelope.currentAmountClass" *ngIf="envelope.CurrentAmount">
+                        <b>{{ envelope.CurrentAmount | money }}</b>
+                    </td>
+                </tr>
+            </table>
+
+            <div *ngIf="envelope.TargetAmount" class="completePercent" fxFlexAlign="center">
+                <span title="Необходимая сумма - {{ envelope.TargetAmount | money }}">{{ envelope.completePercentStr }}</span>
+            </div>
+
+            <div>
+                <div *ngIf="envelope.allPlansForShow">
+                    <div fxLayout="row" fxLayoutWrap fxLayoutAlign="{{ envelope.allPlansAlign }}">
+                        <div *ngFor="let plan of envelope.allPlansForShow" [ngClass]="plan.cssClass">
+                            <span class="planDate">
+                                {{ plan.ActionDate | date:'dd.MM' }}:
+                            </span>{{ plan.PlanAmount | money }}
                         </div>
                     </div>
-    
-                    <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!envelope.allPlansForShow">
-                        <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)">
-                            <div *ngIf="envelope.firstPlanIn" [ngClass]="envelope.firstPlanIn.cssClass">
-                                <span class="planDate">
-                                    {{ envelope.firstPlanIn.ActionDate | date:'dd.MM' }}:
-                                </span>+{{ envelope.firstPlanIn.PlanAmount | money }}
-                            </div>
+                    <div fxLayout="row" fxLayoutAlign="{{ envelope.allPlansAlign }}">
+                        <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)" class="envelopePlansSum">
+                            <span class="planDate">
+                                Всего:
+                            </span>{{ envelope.allPlansSum | money }}
                         </div>
-                        <div (click)="showHideAllPlans(envelope, envelope.firstPlanOut)">
-                            <div *ngIf="envelope.firstPlanOut" [ngClass]="envelope.firstPlanOut.cssClass">
-                                <span class="planDate">
-                                    {{ envelope.firstPlanOut.ActionDate | date:'dd.MM' }}:
-                                </span>-{{ envelope.firstPlanOut.PlanAmount | money }}
-                            </div>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!envelope.allPlansForShow">
+                    <div (click)="showHideAllPlans(envelope, envelope.firstPlanIn)">
+                        <div *ngIf="envelope.firstPlanIn" [ngClass]="envelope.firstPlanIn.cssClass">
+                            <span class="planDate">
+                                {{ envelope.firstPlanIn.ActionDate | date:'dd.MM' }}:
+                            </span>{{ (envelope.IsDebet ? '+' : '') + (envelope.firstPlanIn.PlanAmount | money) }}
+                        </div>
+                    </div>
+                    <div (click)="showHideAllPlans(envelope, envelope.firstPlanOut)">
+                        <div *ngIf="envelope.firstPlanOut" [ngClass]="envelope.firstPlanOut.cssClass">
+                            <span class="planDate">
+                                {{ envelope.firstPlanOut.ActionDate | date:'dd.MM' }}:
+                            </span>-{{ envelope.firstPlanOut.PlanAmount | money }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

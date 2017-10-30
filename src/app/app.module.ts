@@ -41,12 +41,14 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { MyInterceptor } from './my-interceptor';
 import { MoneyPipe } from './pipes/money.pipe';
+import { EnvelopePlansComponent } from './envelope-plans/envelope-plans.component';
 
 // определение маршрутов
 const appRoutes: Routes =[
   { path: '', component: HomeComponent},
   { path: 'login', component: LoginComponent },
   { path: 'period-envelopes', component: PeriodEnvelopesComponent, canActivate: [AuthGuard]},
+  { path: 'envelope-plans', component: EnvelopePlansComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
@@ -56,7 +58,8 @@ const appRoutes: Routes =[
     PeriodEnvelopesComponent,
     HomeComponent,
     ErrorDialogComponent,
-    MoneyPipe
+    MoneyPipe,
+    EnvelopePlansComponent
   ],
   entryComponents: [
     ErrorDialogComponent

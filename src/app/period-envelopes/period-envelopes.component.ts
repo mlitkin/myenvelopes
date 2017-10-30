@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { EnvelopePlan } from '../models/envelope-plan';
 import * as _ from 'underscore';
 import { DateService } from '../services/date.service';
+import { BalanceValue } from '../view-models/balance-value';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -18,12 +19,23 @@ export class PeriodEnvelopesComponent implements OnInit {
   selectedProject: Project = new Project();
   envelopes: Envelope[];
   balanceCssClass: string;
+  balanceValues: BalanceValue[];
+  balanceValuesInHeader: BalanceValue[];
 
   constructor(private privateService: PrivateService, private dateService: DateService,
     private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    if (this.projects) {
+      return;
+    }
+
+    //Инициализируем показатели баланса.
+    this.balanceValues = this.privateService.getBalanceValues();
+    this.balanceValuesInHeader = this.balanceValues.filter(x => x.showInHeader);
     this.balanceCssClass = "freeSumHigh";
+
+    //Загружаем проекты и конверты.
     this.privateService.getProjects()
       .switchMap(projects => {
         let project = projects.find(x => x.IsDefault);
