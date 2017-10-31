@@ -26,10 +26,6 @@ export class PeriodEnvelopesComponent implements OnInit {
     private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    if (this.projects) {
-      return;
-    }
-
     //Инициализируем показатели баланса.
     this.balanceValues = this.privateService.getBalanceValues();
     this.balanceValuesInHeader = this.balanceValues.filter(x => x.showInHeader);
