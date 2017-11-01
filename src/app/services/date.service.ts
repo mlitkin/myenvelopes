@@ -40,4 +40,11 @@ export class DateService {
 
     return res;
   }
+
+  getDaysBetweenDates(startDate: Date, endDate: Date): number {
+    startDate = this.getDateObject(startDate);
+    endDate = this.getDateObject(endDate);
+
+    return Math.floor((endDate.getTime() - startDate.getTime()) / 24 / 60 / 60 / 1000) + 1;
+  }
 }

@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { EnvelopePlan } from '../models/envelope-plan';
 import * as _ from 'underscore';
 import { DateService } from '../services/date.service';
-import { BalanceValue } from '../view-models/balance-value';
+import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -43,6 +43,7 @@ export class PeriodEnvelopesComponent implements OnInit {
       .subscribe(envelopes => {
         envelopes.forEach(x => this.fillEnvelopeViewModel(x));
         this.envelopes = this.getSortedEnvelopes(envelopes);
+        this.privateService.FillBalance(this.selectedProject, this.envelopes, this.balanceValues);
       });
   }
 
