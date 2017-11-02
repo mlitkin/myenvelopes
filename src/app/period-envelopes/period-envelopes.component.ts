@@ -29,7 +29,7 @@ export class PeriodEnvelopesComponent implements OnInit {
     //Инициализируем показатели баланса.
     this.balanceValues = this.privateService.getBalanceValues();
     this.balanceValuesInHeader = this.balanceValues.filter(x => x.showInHeader);
-    this.balanceCssClass = "freeSumHigh";
+    this.balanceCssClass = 'freeSumMedium';
 
     //Загружаем проекты и конверты.
     this.privateService.getProjects()
@@ -43,8 +43,22 @@ export class PeriodEnvelopesComponent implements OnInit {
       .subscribe(envelopes => {
         envelopes.forEach(x => this.fillEnvelopeViewModel(x));
         this.envelopes = this.getSortedEnvelopes(envelopes);
-        this.privateService.FillBalance(this.selectedProject, this.envelopes, this.balanceValues);
+        let sign = this.privateService.fillBalance(this.selectedProject, this.envelopes, this.balanceValues);
+        this.calcFreeSumClass(sign);
       });
+  }
+
+  calcFreeSumClass(sign: number) {
+    switch (sign) {
+      case 1:
+        this.balanceCssClass = 'freeSumHigh';
+        break;
+      case -1:
+        this.balanceCssClass = 'freeSumLow';
+        break;
+      default:
+        this.balanceCssClass = 'freeSumMedium';
+    }
   }
 
   fillEnvelopeViewModel(env: Envelope) {

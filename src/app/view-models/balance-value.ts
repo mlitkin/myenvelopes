@@ -10,7 +10,7 @@ export class BalanceValue {
     public description: string;
 
     /**Значение показателя. */
-    public amount: number;
+    public value: string;
         
     /**Необходимость отображение в хедере панели. */
     public showInHeader: boolean;

@@ -5,11 +5,13 @@ import { Project } from '../models/project';
 import { Envelope } from '../models/envelope';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DateService } from '../services/date.service';
+import { MoneyPipe } from '../pipes/money.pipe';
 
 @Injectable()
 export class PrivateService {
 
-  constructor(private httpService: HttpService, private dateService: DateService) { }
+  constructor(private httpService: HttpService, private dateService: DateService,
+    private moneyPipe: MoneyPipe) { }
 
   getProjects(): Observable<Project[]> {
     return this.httpService.getProjects();
@@ -45,6 +47,7 @@ export class PrivateService {
     value = new BalanceValue();
     value.valueType = BalanceValueType.AvailableSaldo;
     value.name = 'Остаток на конец периода';
+    value.description = 'Общая сумма денежных остатков на период, с учетом планов поступлений и расходов.';
     balanceValues.push(value);
 
     value = new BalanceValue();
@@ -55,6 +58,7 @@ export class PrivateService {
     value = new BalanceValue();
     value.valueType = BalanceValueType.FreeSum;
     value.name = 'Можно еще потратить';
+    value.description = 'Эта сумма, которая не обременена расходами и может быть потрачена на незапланированные нужды.';
     value.showInHeader = true;
     balanceValues.push(value);
 
@@ -66,7 +70,28 @@ export class PrivateService {
     return balanceValues;
   }
 
-  FillBalance(project: Project, envelopes: Envelope[], balanceValues: BalanceValue[]) {
+  analyzeFreeSum(availableSaldoByDay: number, criticalSaldoByDay: number): number {
+    if (availableSaldoByDay < 0) {
+      return -1;
+    }
+
+    if (criticalSaldoByDay && availableSaldoByDay > criticalSaldoByDay * 1.2) {
+      return 1;
+    }
+
+    if (!criticalSaldoByDay
+      || (availableSaldoByDay > criticalSaldoByDay && availableSaldoByDay <= criticalSaldoByDay * 1.2)) {
+      return 0;
+    }
+
+    if (criticalSaldoByDay
+      && availableSaldoByDay <= criticalSaldoByDay) {
+      return -1;
+    }
+
+  }
+
+  fillBalance(project: Project, envelopes: Envelope[], balanceValues: BalanceValue[]): number {
     let startSaldo = 0;
     let sumInDebet = 0;
     let sumIn = 0;
@@ -112,32 +137,52 @@ export class PrivateService {
 
     let days = this.dateService.getDaysBetweenDates(this.dateService.getCurrentDate(), project.PeriodEndDate);
     if (days == 0) {
-        days = 1;
+      days = 1;
     }
+    let availableSaldoByDay = availableSaldo / days;
+    let sign = this.analyzeFreeSum(availableSaldoByDay, project.CriticalSaldoByDay);
+
     balanceValues.forEach(x => {
       switch (x.valueType) {
         case BalanceValueType.StartSaldo:
-          x.amount = startSaldo;
+          x.value = this.moneyPipe.transform(startSaldo);
           break;
         case BalanceValueType.SumInDebet:
-          x.amount = sumInDebet;
+          x.value = this.moneyPipe.transform(sumInDebet);
           break;
         case BalanceValueType.SumIn:
-          x.amount = sumIn;
+          x.value = this.moneyPipe.transform(sumIn);
           break;
         case BalanceValueType.SumOut:
-          x.amount = sumOut;
+          x.value = this.moneyPipe.transform(sumOut);
           break;
         case BalanceValueType.AvailableSaldo:
-          x.amount = availableSaldo;
+          x.value = this.moneyPipe.transform(availableSaldo);
           break;
         case BalanceValueType.AvailableSaldoByDay:
-          x.amount = availableSaldo / days;
+          x.value = this.moneyPipe.transform(availableSaldoByDay);
           break;
         case BalanceValueType.FreeSum:
-          x.amount = availableSaldo - (days * 300);
+          x.value = this.moneyPipe.transform(availableSaldo - (days * (project.CriticalSaldoByDay ? project.CriticalSaldoByDay : 0)));
+          break;
+        case BalanceValueType.Conclusion:
+          switch (sign) {
+            case 1:
+              x.value = 'Все хорошо';
+              x.description = 'Ваших денежных средств достаточно для покрытия плановых расходов текущего периода.';
+              break;
+            case -1:
+              x.value = 'Денег не хватает!';
+              x.description = 'Ваших денежных средств недостаточно для покрытия плановых расходов текущего периода. Сумма допустимого расхода в день опустилась ниже критического порога расходов. Пора начать экономить.';
+              break;
+            case 0:
+              x.value = 'Внимательнее к расходам';
+              x.description = 'Ваших денежных средств пока достаточно для покрытия плановых расходов текущего периода, но критический порог расходов в день уже близко. Возможно, пора задуматься об экономии.';
+            }
           break;
       }
     });
+
+    return sign;
   }
 }

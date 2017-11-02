@@ -1,0 +1,14 @@
+<div class="balanceSum" [ngClass]="{ bordered: expanded }">
+  <div (click)="onClick()">
+    <div class="balancePlaceholder">{{ data.name }}</div>
+    <div class="value">{{ data.value }}</div>
+    <div *ngIf="expanded">
+      <div class="description" *ngIf="data.description">
+        <mat-icon>comment</mat-icon>{{ data.description }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="expanded" class="inHeaderCheckbox">
+    <mat-checkbox [(ngModel)]="data.showInHeader" (change)="onChecked()">В заголовок</mat-checkbox>
+  </div>
+</div>

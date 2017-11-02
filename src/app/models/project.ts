@@ -14,4 +14,7 @@ export class Project {
 
     /**Окончание периода. */
     public PeriodEndDate: Date;
+
+    /**Критический порог расходов в день. */
+    public CriticalSaldoByDay: number;
 }

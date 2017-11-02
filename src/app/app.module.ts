@@ -42,6 +42,7 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { MyInterceptor } from './my-interceptor';
 import { MoneyPipe } from './pipes/money.pipe';
 import { EnvelopePlansComponent } from './envelope-plans/envelope-plans.component';
+import { BalanceValueComponent } from './balance-value/balance-value.component';
 
 // определение маршрутов
 const appRoutes: Routes =[
@@ -59,7 +60,8 @@ const appRoutes: Routes =[
     HomeComponent,
     ErrorDialogComponent,
     MoneyPipe,
-    EnvelopePlansComponent
+    EnvelopePlansComponent,
+    BalanceValueComponent
   ],
   entryComponents: [
     ErrorDialogComponent
@@ -86,7 +88,7 @@ const appRoutes: Routes =[
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
-    DateService,
+    DateService, MoneyPipe,
     {
       provide: ErrorHandler, 
       useClass: GlobalErrorHandler
