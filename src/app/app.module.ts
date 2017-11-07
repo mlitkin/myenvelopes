@@ -32,6 +32,7 @@ import {DialogService} from './services/dialog.service';
 import {ErrorService} from './services/error.service';
 import {PrivateService} from './services/private.service';
 import {DateService} from './services/date.service';
+import {DataService} from './services/data.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -88,7 +89,7 @@ const appRoutes: Routes =[
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
-    DateService, MoneyPipe,
+    DateService, MoneyPipe, DataService,
     {
       provide: ErrorHandler, 
       useClass: GlobalErrorHandler

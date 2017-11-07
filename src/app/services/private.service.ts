@@ -75,20 +75,27 @@ export class PrivateService {
       return -1;
     }
 
-    if (criticalSaldoByDay && availableSaldoByDay > criticalSaldoByDay * 1.2) {
-      return 1;
-    }
+    if (criticalSaldoByDay) {
+      let limit = criticalSaldoByDay * 1.2;
 
-    if (!criticalSaldoByDay
-      || (availableSaldoByDay > criticalSaldoByDay && availableSaldoByDay <= criticalSaldoByDay * 1.2)) {
-      return 0;
-    }
+      if (availableSaldoByDay > limit) {
+        return 1;
+      }
 
-    if (criticalSaldoByDay
-      && availableSaldoByDay <= criticalSaldoByDay) {
-      return -1;
-    }
+      if (availableSaldoByDay >= criticalSaldoByDay && availableSaldoByDay <= limit) {
+        return 0;
+      }
 
+      if (availableSaldoByDay < criticalSaldoByDay) {
+        return -1;
+      }
+    } else {
+      if (availableSaldoByDay > 0) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
   }
 
   fillBalance(project: Project, envelopes: Envelope[], balanceValues: BalanceValue[]): number {
@@ -139,8 +146,15 @@ export class PrivateService {
     if (days == 0) {
       days = 1;
     }
-    let availableSaldoByDay = availableSaldo / days;
-    let sign = this.analyzeFreeSum(availableSaldoByDay, project.CriticalSaldoByDay);
+    let availableSaldoByDay = 0;
+    let sign = -1;
+    let freeSum = 0;
+
+    if (days > 0) {
+      availableSaldoByDay = availableSaldo / days;
+      sign = this.analyzeFreeSum(availableSaldoByDay, project.CriticalSaldoByDay);
+      freeSum = availableSaldo - (days * (project.CriticalSaldoByDay ? project.CriticalSaldoByDay : 0));
+    }
 
     balanceValues.forEach(x => {
       switch (x.valueType) {
@@ -163,22 +177,27 @@ export class PrivateService {
           x.value = this.moneyPipe.transform(availableSaldoByDay);
           break;
         case BalanceValueType.FreeSum:
-          x.value = this.moneyPipe.transform(availableSaldo - (days * (project.CriticalSaldoByDay ? project.CriticalSaldoByDay : 0)));
+          x.value = this.moneyPipe.transform(freeSum);
           break;
         case BalanceValueType.Conclusion:
-          switch (sign) {
-            case 1:
-              x.value = 'Все хорошо';
-              x.description = 'Ваших денежных средств достаточно для покрытия плановых расходов текущего периода.';
-              break;
-            case -1:
-              x.value = 'Денег не хватает!';
-              x.description = 'Ваших денежных средств недостаточно для покрытия плановых расходов текущего периода. Сумма допустимого расхода в день опустилась ниже критического порога расходов. Пора начать экономить.';
-              break;
-            case 0:
-              x.value = 'Внимательнее к расходам';
-              x.description = 'Ваших денежных средств пока достаточно для покрытия плановых расходов текущего периода, но критический порог расходов в день уже близко. Возможно, пора задуматься об экономии.';
+          if (days > 0) {
+            switch (sign) {
+              case 1:
+                x.value = 'Все хорошо';
+                x.description = 'Ваших денежных средств достаточно для покрытия плановых расходов текущего периода.';
+                break;
+              case -1:
+                x.value = 'Денег не хватает';
+                x.description = 'Ваших денежных средств недостаточно для покрытия плановых расходов текущего периода. Сумма допустимого расхода в день опустилась ниже критического порога расходов. Пора начать экономить.';
+                break;
+              case 0:
+                x.value = 'Внимательнее к расходам';
+                x.description = 'Ваших денежных средств пока достаточно для покрытия плановых расходов текущего периода, но критический порог расходов в день уже близко. Возможно, пора задуматься об экономии.';
             }
+          } else {
+            x.value = 'Неверно указан период';
+            x.description = 'Дата завершения периода должна быть больше текущей даты.';
+          }
           break;
       }
     });

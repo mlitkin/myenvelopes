@@ -8,6 +8,7 @@ import { EnvelopePlan } from '../models/envelope-plan';
 import * as _ from 'underscore';
 import { DateService } from '../services/date.service';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -22,30 +23,54 @@ export class PeriodEnvelopesComponent implements OnInit {
   balanceValues: BalanceValue[];
   balanceValuesInHeader: BalanceValue[];
 
-  constructor(private privateService: PrivateService, private dateService: DateService,
+  constructor(private privateService: PrivateService, private dateService: DateService, private dataService: DataService,
     private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    if (this.dataService.isDataLoaded) {
+      //Если данные уже загружены в память.
+      this.setBalanceValues(this.dataService.balanceValues);
+      this.setProjects(this.dataService.projects);
+      this.setEnvelopes(this.dataService.envelopes);
+
+      return;
+    }
+
     //Инициализируем показатели баланса.
-    this.balanceValues = this.privateService.getBalanceValues();
-    this.balanceValuesInHeader = this.balanceValues.filter(x => x.showInHeader);
-    this.balanceCssClass = 'freeSumMedium';
+    let values = this.privateService.getBalanceValues();
+    this.setBalanceValues(values);    
+    this.dataService.balanceValues = values;
 
     //Загружаем проекты и конверты.
     this.privateService.getProjects()
       .switchMap(projects => {
-        let project = projects.find(x => x.IsDefault);
-        this.projects = projects;
-        this.selectedProject = project;
-
-        return this.privateService.getEnvelopes([project.Id], project.PeriodStartDate, project.PeriodEndDate);
+        this.setProjects(projects);
+        this.dataService.projects = projects;
+        return this.privateService.getEnvelopes([this.selectedProject.Id], this.selectedProject.PeriodStartDate, this.selectedProject.PeriodEndDate);
       })
       .subscribe(envelopes => {
         envelopes.forEach(x => this.fillEnvelopeViewModel(x));
-        this.envelopes = this.getSortedEnvelopes(envelopes);
-        let sign = this.privateService.fillBalance(this.selectedProject, this.envelopes, this.balanceValues);
-        this.calcFreeSumClass(sign);
+        this.setEnvelopes(envelopes);
+        this.dataService.envelopes = envelopes;
+        this.dataService.isDataLoaded = true;
       });
+  }
+
+  setBalanceValues(balanceValues: BalanceValue[]) {
+    this.balanceValues = balanceValues;
+    this.balanceValuesInHeader = balanceValues.filter(x => x.showInHeader);
+    this.balanceCssClass = 'freeSumMedium';
+  }
+
+  setProjects(projects: Project[]) {
+    this.projects = projects;
+    this.selectedProject = projects.find(x => x.IsDefault);
+  }
+
+  setEnvelopes(envelopes: Envelope[]) {
+    this.envelopes = this.getSortedEnvelopes(envelopes);
+    let sign = this.privateService.fillBalance(this.selectedProject, this.envelopes, this.balanceValues);
+    this.calcFreeSumClass(sign);
   }
 
   calcFreeSumClass(sign: number) {
