@@ -9,6 +9,7 @@ import * as _ from 'underscore';
 import { DateService } from '../services/date.service';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DataService } from '../services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -22,9 +23,10 @@ export class PeriodEnvelopesComponent implements OnInit {
   balanceCssClass: string;
   balanceValues: BalanceValue[];
   balanceValuesInHeader: BalanceValue[];
+  planDateClassName: string = 'planDate';
 
   constructor(private privateService: PrivateService, private dateService: DateService, private dataService: DataService,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer, private router: Router) { }
 
   ngOnInit() {
     if (this.dataService.isDataLoaded) {
@@ -207,5 +209,16 @@ export class PeriodEnvelopesComponent implements OnInit {
     let plansSum = 0;
     envelope.allPlansForShow.forEach(x => plansSum = plansSum + x.PlanAmount);
     envelope.allPlansSum = plansSum;
+  }
+
+  onEnvelopeClick(envelope: Envelope, $event: any) {
+    if ($event.target.className == this.planDateClassName || 
+      ($event.target.firstElementChild && $event.target.firstElementChild.className == this.planDateClassName)) {
+        //Если это клик по планам - игнорим его.
+        return;
+      }
+
+    //Открываем конверт на редакцию.
+    this.router.navigate(['envelope-edit', envelope.Id]);
   }
 }

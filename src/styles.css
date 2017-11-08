@@ -4,3 +4,7 @@
 html, body {
     font-family: 'Arial Narrow', Arial, sans-serif;
 }
+
+.mat-tab-body-wrapper {
+    margin-top: 10px;
+}

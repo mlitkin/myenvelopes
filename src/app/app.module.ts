@@ -18,7 +18,8 @@ import { MatButtonModule,
   MatSelectModule,
   MatExpansionModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTabsModule
  } from '@angular/material';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
@@ -44,12 +45,14 @@ import { MyInterceptor } from './my-interceptor';
 import { MoneyPipe } from './pipes/money.pipe';
 import { EnvelopePlansComponent } from './envelope-plans/envelope-plans.component';
 import { BalanceValueComponent } from './balance-value/balance-value.component';
+import { EnvelopeEditComponent } from './envelope-edit/envelope-edit.component';
 
 // определение маршрутов
 const appRoutes: Routes =[
   { path: '', component: HomeComponent},
   { path: 'login', component: LoginComponent },
   { path: 'period-envelopes', component: PeriodEnvelopesComponent, canActivate: [AuthGuard]},
+  { path: 'envelope-edit/:id', component: EnvelopeEditComponent, canActivate: [AuthGuard]},
   { path: 'envelope-plans', component: EnvelopePlansComponent, canActivate: [AuthGuard]},
 ];
 
@@ -62,7 +65,8 @@ const appRoutes: Routes =[
     ErrorDialogComponent,
     MoneyPipe,
     EnvelopePlansComponent,
-    BalanceValueComponent
+    BalanceValueComponent,
+    EnvelopeEditComponent
   ],
   entryComponents: [
     ErrorDialogComponent
@@ -85,7 +89,8 @@ const appRoutes: Routes =[
     MatSelectModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTabsModule
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
