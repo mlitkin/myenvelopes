@@ -1,8 +1,17 @@
-<h2>{{ envelope.Name }}</h2>
-<mat-tab-group>
-  <mat-tab label="Основное">
-    Основное
-  </mat-tab>
-  <mat-tab label="Планы">Планы</mat-tab>
-  <mat-tab label="Изображение">Изображение</mat-tab>
-</mat-tab-group>
+<div class="container">
+  <div class="page-header">{{ envelope.Name }}</div>
+  <mat-tab-group>
+    <mat-tab label="Основное">
+      <div fxLayout="row">
+        <div fxFlex="2 2 100%" style="border: 1px solid red;">
+            Лейба Лейба Лейба
+        </div>
+        <div fxFlex="1 1 100%" style="border: 1px solid blue;">
+            Контрол Контрол Контрол Контрол
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Планы">Планы</mat-tab>
+    <mat-tab label="Изображение">Изображение</mat-tab>
+  </mat-tab-group>
+</div>

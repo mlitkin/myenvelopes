@@ -3,8 +3,13 @@
 
 html, body {
     font-family: 'Arial Narrow', Arial, sans-serif;
+    color: rgb(97, 97, 95);
 }
 
 .mat-tab-body-wrapper {
     margin-top: 10px;
+}
+
+.page-header {
+    font-size: 2rem;
 }
