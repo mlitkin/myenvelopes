@@ -46,6 +46,7 @@ import { MoneyPipe } from './pipes/money.pipe';
 import { EnvelopePlansComponent } from './envelope-plans/envelope-plans.component';
 import { BalanceValueComponent } from './balance-value/balance-value.component';
 import { EnvelopeEditComponent } from './envelope-edit/envelope-edit.component';
+import { MoneyDirective } from './directives/money.directive';
 
 // определение маршрутов
 const appRoutes: Routes =[
@@ -66,7 +67,8 @@ const appRoutes: Routes =[
     MoneyPipe,
     EnvelopePlansComponent,
     BalanceValueComponent,
-    EnvelopeEditComponent
+    EnvelopeEditComponent,
+    MoneyDirective
   ],
   entryComponents: [
     ErrorDialogComponent
