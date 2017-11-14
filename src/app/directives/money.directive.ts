@@ -26,6 +26,7 @@ export class MoneyDirective implements OnInit {
 
   @HostListener("blur", ["$event.target.value"])
   onBlur(value) {
+    //Не работает вызов пайпа внутри директивы! Почему-то возвращает пустую строку.
     //this.el.value = this.moneyPipe.transform(value);
   }
 }

@@ -15,14 +15,42 @@
           <input matInput placeholder="Описание" name="description" [(ngModel)]="envelope.Description">
         </mat-form-field>
         <mat-form-field>
-          <input matInput money placeholder="Текущая сумма" name="currentAmount" type="number" [(ngModel)]="envelope.CurrentAmount">
+          <input matInput placeholder="Текущая сумма" name="currentAmount" type="number" [(ngModel)]="envelope.CurrentAmount">
         </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Необходимая сумма" name="targetAmount" type="number" [(ngModel)]="envelope.TargetAmount">
+        </mat-form-field>
+        <div>
+          <mat-checkbox [(ngModel)]="envelope.IsDebet" name="isDebet">Является источником для других конвертов</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox [(ngModel)]="envelope.IsExternalCurrentAmount" name="isExternalCurrentAmount">Текущая сумма не влияет на баланс</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox [(ngModel)]="envelope.Enabled" name="enabled">Активен</mat-checkbox>
+        </div>
+        <div style="height: 20px"></div>
       </mat-tab>
-      <mat-tab label="Планы">Планы</mat-tab>
+      <mat-tab label="Планы">
+        <!-- <mat-table #table [dataSource]="envelope.Plans">
+
+          <ng-container matColumnDef="PlanAmount">
+            <mat-header-cell *matHeaderCellDef> Сумма </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.PlanAmount}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator [length]="envelope.Plans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator> -->
+      </mat-tab>
       <mat-tab label="Изображение">Изображение</mat-tab>
     </mat-tab-group>
     <div>
-      <button mat-raised-button color="accent" [disabled]="envelopeForm.invalid" (click)="save(envelopeForm)">Сохранить</button>
+      <button type="button" mat-raised-button color="accent" [disabled]="envelopeForm.invalid" (click)="save(envelopeForm)">Сохранить</button>
+      <button mat-button (click)="onBackClick()">Отмена</button>
     </div>
   </form>
 </div>

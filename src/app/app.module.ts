@@ -22,6 +22,8 @@ import { MatButtonModule,
   MatTabsModule
  } from '@angular/material';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 import { GlobalErrorHandler } from './global-error-handler';
 import { AuthGuard }   from './auth.guard';
@@ -92,7 +94,9 @@ const appRoutes: Routes =[
     MatExpansionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [ DecimalPipe,
     UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,

@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Envelope } from '../models/envelope';
 import { Project } from '../models/project';
 import { NgForm } from '@angular/forms';
+import * as _ from 'underscore';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-envelope-edit',
@@ -13,26 +15,44 @@ import { NgForm } from '@angular/forms';
 export class EnvelopeEditComponent implements OnInit {
   envelope: Envelope;
   projects: Project[];
+  displayedColumns = ['PlanAmount'];
 
-  constructor(private activateRoute: ActivatedRoute, private router: Router, private dataService: DataService) {
+  constructor(private activateRoute: ActivatedRoute, private router: Router, private dataService: DataService,
+    private location: Location) {
     this.envelope = new Envelope();
     this.envelope.Name = 'Новый конверт';
   }
 
   ngOnInit() {
     if (!this.dataService.envelopes) {
-      this.router.navigate(['period-envelopes']);
+      this.redirectToPeriodEnvelopes();
       return;
-    }
+    }   
 
-    this.projects = this.dataService.projects;
     let id = this.activateRoute.snapshot.params['id'];
+    this.projects = this.dataService.projects;
     if (id > 0) {
-      this.envelope = this.dataService.envelopes.find(x => x.Id == id);
+      let envelope = this.dataService.envelopes.find(x => x.Id == id);
+      this.envelope = <Envelope>JSON.parse(JSON.stringify(envelope));
+    } else {
+      this.envelope = new Envelope();
+      this.envelope.Name = 'Новый конверт';
     }
   }
 
+  redirectToPeriodEnvelopes() {
+    this.router.navigate(['period-envelopes']);
+  }
+
   save(form: NgForm) {
-    alert(1);
+    if (this.envelope.Id > 0) {
+      let i = _.findIndex(this.dataService.envelopes, x => x.Id == this.envelope.Id);
+      this.dataService.envelopes[i] = this.envelope;
+    }
+    this.location.back();
+  }
+
+  onBackClick() {
+    this.location.back();
   }
 }

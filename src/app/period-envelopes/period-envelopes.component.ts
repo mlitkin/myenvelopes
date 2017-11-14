@@ -51,7 +51,6 @@ export class PeriodEnvelopesComponent implements OnInit {
         return this.privateService.getEnvelopes([this.selectedProject.Id], this.selectedProject.PeriodStartDate, this.selectedProject.PeriodEndDate);
       })
       .subscribe(envelopes => {
-        envelopes.forEach(x => this.fillEnvelopeViewModel(x));
         this.setEnvelopes(envelopes);
         this.dataService.envelopes = envelopes;
         this.dataService.isDataLoaded = true;
@@ -70,6 +69,7 @@ export class PeriodEnvelopesComponent implements OnInit {
   }
 
   setEnvelopes(envelopes: Envelope[]) {
+    envelopes.forEach(x => this.fillEnvelopeViewModel(x));
     this.envelopes = this.getSortedEnvelopes(envelopes);
     let sign = this.privateService.fillBalance(this.selectedProject, this.envelopes, this.balanceValues);
     this.calcFreeSumClass(sign);
