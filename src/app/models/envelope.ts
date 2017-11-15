@@ -3,6 +3,10 @@ import { EnvelopePlan } from "./envelope-plan";
 
 /**Конверт. */
 export class Envelope {
+    constructor() {
+        this.Plans = [];
+    }
+
     /**Id. */
     public Id: number;
 

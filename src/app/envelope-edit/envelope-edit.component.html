@@ -32,23 +32,41 @@
         <div style="height: 20px"></div>
       </mat-tab>
       <mat-tab label="Планы">
-        <!-- <mat-table #table [dataSource]="envelope.Plans">
+        <mat-table #plansTable [dataSource]="plansDataSource">
 
+          <ng-container matColumnDef="ActionDate">
+            <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <div>
+                  <input matInput [matDatepicker]="dpActionDate" placeholder="Дата" 
+                    [(ngModel)]="row.ActionDate" [ngModelOptions]="{standalone: true}"
+                    (click)="dpActionDate.open()">
+                  <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
+                </div>
+                <div>123</div>
+            </mat-cell>
+          </ng-container>
           <ng-container matColumnDef="PlanAmount">
-            <mat-header-cell *matHeaderCellDef> Сумма </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.PlanAmount}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef>Сумма</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <input matInput placeholder="Сумма" type="number" [(ngModel)]="row.PlanAmount" [ngModelOptions]="{standalone: true}">
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Description">
+            <mat-header-cell *matHeaderCellDef>Комментарий</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{ row.Description }}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
 
-        <mat-paginator #paginator [length]="envelope.Plans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
-        </mat-paginator> -->
+        <mat-paginator #plansPaginator [length]="envelope.Plans.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[10, 20, 30]">
+        </mat-paginator>
       </mat-tab>
       <mat-tab label="Изображение">Изображение</mat-tab>
     </mat-tab-group>
-    <div>
+    <div style="margin-top: 20px">
       <button type="button" mat-raised-button color="accent" [disabled]="envelopeForm.invalid" (click)="save(envelopeForm)">Сохранить</button>
       <button mat-button (click)="onBackClick()">Отмена</button>
     </div>

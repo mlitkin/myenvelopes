@@ -93,6 +93,9 @@ export class PeriodEnvelopesComponent implements OnInit {
     env.nameClass = this.getEnvelopeNameClass(env);
     env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
     env.completePercentStr = this.getCompletePercent(env);
+    env.firstPlan = null;
+    env.firstPlanIn = null;
+    env.firstPlanOut = null;
 
     env.Plans.forEach(plan => this.fillEnvelopePlanViewModel(env, plan));
   }
