@@ -113,7 +113,7 @@ export class PeriodEnvelopesComponent implements OnInit {
       env.firstPlanOut = plan;
     }
 
-    plan.cssClass = this.getEnvelopePlanSumClass(env, plan);
+    plan.cssClass = this.privateService.getEnvelopePlanSumClass(env, plan);
   }
 
   getSortedEnvelopes(envelopes: Envelope[]) {
@@ -190,14 +190,6 @@ export class PeriodEnvelopesComponent implements OnInit {
     return envelope.TargetAmount
       ? Math.round((envelope.CurrentAmount / envelope.TargetAmount) * 100).toString() + '%'
       : '';
-  }
-
-  getEnvelopePlanSumClass(envelope: Envelope, plan: EnvelopePlan) {
-    if (envelope.IsDebet && plan.IsIncoming) {
-      return 'envelopePlanInDebet';
-    }
-
-    return plan.IsIncoming ? 'envelopePlan' : 'envelopePlanOut';
   }
 
   showHideAllPlans(envelope: Envelope, plan: EnvelopePlan) {

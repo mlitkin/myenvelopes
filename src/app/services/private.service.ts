@@ -6,6 +6,7 @@ import { Envelope } from '../models/envelope';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DateService } from '../services/date.service';
 import { MoneyPipe } from '../pipes/money.pipe';
+import { EnvelopePlan } from '../models/envelope-plan';
 
 @Injectable()
 export class PrivateService {
@@ -203,5 +204,13 @@ export class PrivateService {
     });
 
     return sign;
+  }
+
+  getEnvelopePlanSumClass(envelope: Envelope, plan: EnvelopePlan) {
+    if (envelope.IsDebet && plan.IsIncoming) {
+      return 'envelopePlanInDebet';
+    }
+
+    return plan.IsIncoming ? 'envelopePlan' : 'envelopePlanOut';
   }
 }

@@ -58,18 +58,6 @@
     font-size: 1.2rem;
 }
 
-.envelopePlan {
-    background-color: rgba(254, 199, 9, 0.8);
-}
-
-.envelopePlanInDebet {
-    background-color: rgba(71, 220, 22, 0.8);
-}
-
-.envelopePlanOut {
-    background-color: rgba(249, 100, 99, 0.8);
-}
-
 .planDate {
     color: black;
     font-weight: normal;

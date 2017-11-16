@@ -6,12 +6,9 @@ import { Project } from '../models/project';
 import { NgForm } from '@angular/forms';
 import * as _ from 'underscore';
 import { Location } from '@angular/common';
-import { DataSource } from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
 import { EnvelopePlan } from '../models/envelope-plan';
-import { MatPaginator } from '@angular/material';
+import { PrivateService } from '../services/private.service';
 
 @Component({
   selector: 'app-envelope-edit',
@@ -21,14 +18,9 @@ import { MatPaginator } from '@angular/material';
 export class EnvelopeEditComponent implements OnInit {
   envelope: Envelope;
   projects: Project[];
-  plansDataSource: EnvelopePlansDataSource;
-  displayedColumns = ['ActionDate', 'PlanAmount', 'Description'];
 
-  @ViewChild(MatPaginator) 
-  plansPaginator: MatPaginator;
-
-  constructor(private activateRoute: ActivatedRoute, private router: Router, private dataService: DataService,
-    private location: Location) {
+  constructor(private privateService: PrivateService, private activateRoute: ActivatedRoute, private router: Router, 
+    private dataService: DataService, private location: Location) {
     this.envelope = new Envelope();
     this.envelope.Name = 'Новый конверт';
   }
@@ -48,8 +40,6 @@ export class EnvelopeEditComponent implements OnInit {
       this.envelope = new Envelope();
       this.envelope.Name = 'Новый конверт';
     }
-
-    this.plansDataSource = new EnvelopePlansDataSource(this.envelope.Plans, this.plansPaginator);
   }
 
   redirectToPeriodEnvelopes() {
@@ -67,28 +57,9 @@ export class EnvelopeEditComponent implements OnInit {
   onBackClick() {
     this.location.back();
   }
-}
 
-export class EnvelopePlansDataSource extends DataSource<any> {
-  constructor(private data: EnvelopePlan[], private paginator: MatPaginator) {
-    super();
+  changePlanSign(plan: EnvelopePlan) {
+    plan.IsIncoming = !plan.IsIncoming;
+    plan.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, plan);
   }
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<EnvelopePlan[]> {
-    const displayDataChanges = [
-      this.data,
-      this.paginator.page,
-    ];
-
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this.data.slice();
-
-      // Grab the page's slice of data.
-      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    });
-  }
-
-  disconnect() { }
-
 }

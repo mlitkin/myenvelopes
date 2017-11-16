@@ -32,37 +32,26 @@
         <div style="height: 20px"></div>
       </mat-tab>
       <mat-tab label="Планы">
-        <mat-table #plansTable [dataSource]="plansDataSource">
-
-          <ng-container matColumnDef="ActionDate">
-            <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-                <div>
-                  <input matInput [matDatepicker]="dpActionDate" placeholder="Дата" 
-                    [(ngModel)]="row.ActionDate" [ngModelOptions]="{standalone: true}"
-                    (click)="dpActionDate.open()">
-                  <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
-                </div>
-                <div>123</div>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="PlanAmount">
-            <mat-header-cell *matHeaderCellDef>Сумма</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-                <input matInput placeholder="Сумма" type="number" [(ngModel)]="row.PlanAmount" [ngModelOptions]="{standalone: true}">
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="Description">
-            <mat-header-cell *matHeaderCellDef>Комментарий</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.Description }}</mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-
-        <mat-paginator #plansPaginator [length]="envelope.Plans.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[10, 20, 30]">
-        </mat-paginator>
+        <table id="plans" style="width: 100%">
+          <tr *ngFor="let plan of envelope.Plans" [ngClass]="plan.cssClass">
+            <td width="40px">
+                <input matInput [matDatepicker]="dpActionDate" placeholder="Дата" 
+                [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
+                (click)="dpActionDate.open()">
+              <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
+            </td>
+            <td class="planDescription">
+                <input matInput placeholder="Комментарий" type="text" [(ngModel)]="plan.Description" [ngModelOptions]="{standalone: true}">
+            </td>
+            <td width="24px" class="planSign" (click)="changePlanSign(plan)">
+                <mat-icon *ngIf="plan.IsIncoming">add</mat-icon>
+                <mat-icon *ngIf="!plan.IsIncoming">remove</mat-icon>
+            </td>
+            <td width="100px" class="planSum">
+                <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}">
+            </td>
+          </tr>
+        </table>
       </mat-tab>
       <mat-tab label="Изображение">Изображение</mat-tab>
     </mat-tab-group>

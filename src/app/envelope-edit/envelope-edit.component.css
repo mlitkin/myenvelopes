@@ -12,3 +12,24 @@
 mat-form-field {
     width: 100%;
 }
+
+#plans td {
+    padding: 3px 5px; 
+    color: black;
+}
+
+.planDescription {
+    font-size: 0.7rem;
+}
+
+.planSum {
+    color: white !important;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: right;
+}
+
+.planSign {
+    color: white !important;
+    font-weight: bold;
+}
