@@ -10,8 +10,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private login: string;
-  private password: string;
+  public login: string;
+  public password: string;
   private subscription: Subscription;
 
   constructor(private userService: UserService, private activateRoute: ActivatedRoute) {
