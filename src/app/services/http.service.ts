@@ -12,8 +12,8 @@ import { Envelope } from '../models/envelope';
 
 @Injectable()
 export class HttpService {
-  //private baseUrl = 'http://localhost:61595/api/';
-  private baseUrl = 'http://myenvelopes.ru/api/';
+  private baseUrl = 'http://localhost:61595/api/';
+  //private baseUrl = '../api/';
 
   constructor(private http: HttpClient, private dateService: DateService) { }
 

@@ -10,6 +10,7 @@ import { DateService } from '../services/date.service';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DataService } from '../services/data.service';
 import { Router } from '@angular/router';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -26,7 +27,11 @@ export class PeriodEnvelopesComponent implements OnInit {
   planDateClassName: string = 'planDate';
 
   constructor(private privateService: PrivateService, private dateService: DateService, private dataService: DataService,
-    private sanitizer: DomSanitizer, private router: Router) { }
+    private sanitizer: DomSanitizer, private router: Router, private platformLocation: PlatformLocation) {
+      console.log((platformLocation as any).location);
+      console.log((platformLocation as any).location.href);
+      console.log((platformLocation as any).location.origin);
+     }
 
   ngOnInit() {
     if (this.dataService.isDataLoaded) {
