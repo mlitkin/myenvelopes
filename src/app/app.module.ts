@@ -6,6 +6,7 @@ import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DecimalPipe } from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 
 import { MatButtonModule, 
   MatInputModule,
@@ -113,6 +114,11 @@ const appRoutes: Routes =[
     {
       provide: MATERIAL_COMPATIBILITY_MODE, 
       useValue: true
+    },
+    {
+      provide: APP_BASE_HREF, 
+      //useValue: '/' //Локально
+      useValue: '/ui2/' //Прод
     }],
   bootstrap: [AppComponent]
 })

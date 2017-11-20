@@ -12,10 +12,10 @@ import { Envelope } from '../models/envelope';
 
 @Injectable()
 export class HttpService {
-  private baseUrl = 'http://localhost:61595/api/';
-  //private baseUrl = '../api/';
+  //private baseUrl = 'http://localhost:61595/api/'; //Локально
+  private baseUrl = '../api/'; //Прод
 
-  constructor(private http: HttpClient, private dateService: DateService) { }
+  constructor(private http: HttpClient, private dateService: DateService) {}
 
   getUserToken(login: string, passwordHash: string) : Observable<User>{
     return this.http.get<User>(this.baseUrl + 'auth/GetUserToken',

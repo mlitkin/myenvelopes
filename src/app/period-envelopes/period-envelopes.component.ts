@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { PrivateService } from '../services/private.service';
 import 'rxjs/add/operator/switchMap';
 import { Project } from '../models/project';
@@ -10,7 +10,7 @@ import { DateService } from '../services/date.service';
 import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DataService } from '../services/data.service';
 import { Router } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -27,11 +27,7 @@ export class PeriodEnvelopesComponent implements OnInit {
   planDateClassName: string = 'planDate';
 
   constructor(private privateService: PrivateService, private dateService: DateService, private dataService: DataService,
-    private sanitizer: DomSanitizer, private router: Router, private platformLocation: PlatformLocation) {
-      console.log((platformLocation as any).location);
-      console.log((platformLocation as any).location.href);
-      console.log((platformLocation as any).location.origin);
-     }
+    private sanitizer: DomSanitizer, private router: Router, @Inject(APP_BASE_HREF) private baseHref: string) { }
 
   ngOnInit() {
     if (this.dataService.isDataLoaded) {
@@ -161,7 +157,7 @@ export class PeriodEnvelopesComponent implements OnInit {
 
   getEnvelopeBackground(imageUrl: string) {
     if (!imageUrl) {
-      imageUrl = '/assets/images/envelope.png';
+      imageUrl = this.baseHref + 'assets/images/envelope.png';
     }
 
     return this.sanitizer.bypassSecurityTrustStyle(`url(${imageUrl})`);
