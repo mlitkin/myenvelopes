@@ -7,8 +7,8 @@
                         <b>Баланс периода</b>
                     </div>
                     <div *ngIf="!balancePanel.expanded">
-                        <div>с {{ selectedProject.PeriodStartDate | date }}</div>
-                        <div>по {{ selectedProject.PeriodEndDate | date }}</div>
+                        <div>с {{ selectedProject.PeriodStartDate | date:'dd.MM' }}</div>
+                        <div>по {{ selectedProject.PeriodEndDate | date:'dd.MM' }}</div>
                     </div>
                     <div fxLayout="row" fxLayoutGap="10px">
                         <balance-value [data]="balanceValue" [canExpand]="false" *ngFor="let balanceValue of balanceValuesInHeader">
@@ -46,9 +46,10 @@
     </mat-expansion-panel>
 </div>
 
-<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap>
-    <div *ngFor="let envelope of envelopes" class="envelopeImaged" [style.background-image]="envelope.background" fxFlex="282px"
-        fxFlex.xs="200px" (click)="onEnvelopeClick(envelope, $event)">
+<div fxLayout="row" fxLayoutWrap>
+    <div *ngFor="let envelope of envelopes" class="envelopeImaged" [style.background-image]="envelope.background" 
+        fxFlex="282px" fxFlex.xs="100%" fxFlex.sm="32%" fxFlex.md="24%"
+        (click)="onEnvelopeClick(envelope, $event)">
         <div fxLayout="column" fxLayoutAlign="space-between stretch" style="height: 100%">
             <table class="envelopeTop">
                 <tr>

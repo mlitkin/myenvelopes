@@ -3,8 +3,8 @@ import { User, UserRole } from "../models/user";
 import {HttpService} from './http.service';
 import {Md5} from 'ts-md5/dist/md5';
 import { Router } from '@angular/router';
-//import {CookieService} from 'angular2-cookie/core';
-//import { CookieOptionsArgs } from 'angular2-cookie/services';
+import {CookieService} from 'angular2-cookie/core';
+import { CookieOptionsArgs } from 'angular2-cookie/services';
 
 //Из-за CookieService в prod-режиме падает ошибка провайдера!
 
@@ -14,7 +14,7 @@ export class UserService {
   /**Текущий пользователь. */
   public user: User;
 
-  constructor(private httpService: HttpService/*, private cookieService: CookieService*/, private router: Router) {
+  constructor(private httpService: HttpService, private cookieService: CookieService, private router: Router) {
     this.user = new User();
     this.user.Login = 'guest';
     this.user.Role = UserRole.Public;
@@ -33,12 +33,12 @@ export class UserService {
           this.user = data;
 
           //Сохраняем данные в куки.
-          /*var expireDate = new Date ();
+          var expireDate = new Date ();
           expireDate.setDate(expireDate.getDate() + 90);
           let opt: CookieOptionsArgs = { expires: expireDate };
           
           this.cookieService.put('login', login, opt);
-          this.cookieService.put('password', passwordHash, opt);*/
+          this.cookieService.put('password', passwordHash, opt);
 
           this.router.navigate(['period-envelopes']);
         }
@@ -46,7 +46,7 @@ export class UserService {
   }
 
   tryLoginByCookie(redirectPath: string): void {
-    /*let login = this.cookieService.get('login');
+    let login = this.cookieService.get('login');
     let passwordHash = this.cookieService.get('password');
     if (login && passwordHash) {
       this.httpService.getUserToken(login, passwordHash)
@@ -56,6 +56,6 @@ export class UserService {
           this.router.navigate([redirectPath]);
         }
       );
-    }*/
+    }
   }
 }

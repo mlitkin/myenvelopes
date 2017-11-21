@@ -21,7 +21,7 @@
           <input matInput placeholder="Необходимая сумма" name="targetAmount" type="number" [(ngModel)]="envelope.TargetAmount">
         </mat-form-field>
         <div>
-          <mat-checkbox [(ngModel)]="envelope.IsDebet" name="isDebet">Является источником для других конвертов</mat-checkbox>
+          <mat-checkbox [(ngModel)]="envelope.IsDebet" name="isDebet">Источник для других конвертов</mat-checkbox>
         </div>
         <div>
           <mat-checkbox [(ngModel)]="envelope.IsExternalCurrentAmount" name="isExternalCurrentAmount">Текущая сумма не влияет на баланс</mat-checkbox>
@@ -33,21 +33,25 @@
       </mat-tab>
       <mat-tab label="Планы">
         <table id="plans" style="width: 100%">
-          <tr *ngFor="let plan of envelope.Plans" [ngClass]="plan.cssClass">
-            <td width="40px">
-                <input matInput [matDatepicker]="dpActionDate" placeholder="Дата" 
-                [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
-                (click)="dpActionDate.open()">
+          <tr *ngFor="let plan of envelope.Plans">
+            <td width="40px" class="planDate" (click)="dpActionDate.open()">
+              <div>{{ plan.ActionDate | date:'dd.MM' }}</div>
+              <div style="visibility: hidden; height: 0px !important">
+                  <input matInput [matDatepicker]="dpActionDate" placeholder="Дата"
+                  [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
+                  (click)="dpActionDate.open()">
+              </div>
               <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
             </td>
             <td class="planDescription">
-                <input matInput placeholder="Комментарий" type="text" [(ngModel)]="plan.Description" [ngModelOptions]="{standalone: true}">
+                <textarea matInput placeholder="Комментарий" matTextareaAutosize matAutosizeMinRows="1"
+                  matAutosizeMaxRows="5" [(ngModel)]="plan.Description" [ngModelOptions]="{standalone: true}"></textarea>
             </td>
-            <td width="24px" class="planSign" (click)="changePlanSign(plan)">
+            <td width="24px" class="planSign" (click)="changePlanSign(plan)" [ngClass]="plan.cssClass">
                 <mat-icon *ngIf="plan.IsIncoming">add</mat-icon>
                 <mat-icon *ngIf="!plan.IsIncoming">remove</mat-icon>
             </td>
-            <td width="100px" class="planSum">
+            <td width="100px" class="planSum" [ngClass]="plan.cssClass">
                 <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}">
             </td>
           </tr>
