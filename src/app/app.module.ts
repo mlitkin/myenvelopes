@@ -117,8 +117,8 @@ const appRoutes: Routes =[
     },
     {
       provide: APP_BASE_HREF, 
-      //useValue: '/' //Локально
-      useValue: '/ui2/' //Прод
+      useValue: '/' //Локально
+      //useValue: '/ui2/' //Прод
     }],
   bootstrap: [AppComponent]
 })
