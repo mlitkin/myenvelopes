@@ -39,7 +39,7 @@
               <div style="visibility: hidden; height: 0px !important">
                   <input matInput [matDatepicker]="dpActionDate" placeholder="Дата"
                   [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
-                  (click)="dpActionDate.open()">
+                  (click)="dpActionDate.open()" (dateChange)="planDateChanged(plan)">
               </div>
               <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
             </td>
@@ -54,12 +54,18 @@
             <td width="100px" class="planSum" [ngClass]="plan.cssClass">
                 <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}">
             </td>
-          </tr>
+            <td width="20px">
+              <mat-icon>more_vert</mat-icon>
+          </td>
+        </tr>
         </table>
+        <div style="margin-top: 20px;">
+          <a href="#" (click)="addPlan()">Добавить план</a>
+        </div>
       </mat-tab>
       <mat-tab label="Изображение">Изображение</mat-tab>
     </mat-tab-group>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px; text-align: right;">
       <button type="button" mat-raised-button color="accent" [disabled]="envelopeForm.invalid" (click)="save(envelopeForm)">Сохранить</button>
       <button mat-button (click)="onBackClick()">Отмена</button>
     </div>

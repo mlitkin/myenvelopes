@@ -6,6 +6,15 @@ html, body {
     color: rgb(97, 97, 95);
 }
 
+a {
+    color: rgb(51, 122, 183);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 .mat-tab-body-wrapper {
     margin-top: 10px;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Envelope } from '../models/envelope';
@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { EnvelopePlan } from '../models/envelope-plan';
 import { PrivateService } from '../services/private.service';
+import { DateService } from '../services/date.service';
 
 @Component({
   selector: 'app-envelope-edit',
@@ -19,8 +20,8 @@ export class EnvelopeEditComponent implements OnInit {
   envelope: Envelope;
   projects: Project[];
 
-  constructor(private privateService: PrivateService, private activateRoute: ActivatedRoute, private router: Router, 
-    private dataService: DataService, private location: Location) {
+  constructor(private privateService: PrivateService, private activateRoute: ActivatedRoute, private router: Router,
+    private dataService: DataService, private dateService: DateService, private location: Location) {
     this.envelope = new Envelope();
     this.envelope.Name = 'Новый конверт';
   }
@@ -61,5 +62,21 @@ export class EnvelopeEditComponent implements OnInit {
   changePlanSign(plan: EnvelopePlan) {
     plan.IsIncoming = !plan.IsIncoming;
     plan.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, plan);
+  }
+
+  addPlan() {
+    let newPlan = new EnvelopePlan()
+    newPlan.ActionDate = this.dateService.getCurrentDate();
+    newPlan.ClientId = this.dateService.getUniqueIdByDate();
+    newPlan.IsIncoming = this.envelope.TargetAmount ? true : false;
+    newPlan.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, newPlan);
+    
+    this.envelope.Plans.push(newPlan);
+
+    return false;
+  }
+  
+  planDateChanged(plan: EnvelopePlan) {
+    this.envelope.Plans = _.sortBy(this.envelope.Plans, obj => this.dateService.getDateObject(obj.ActionDate));
   }
 }

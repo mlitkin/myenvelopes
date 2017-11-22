@@ -47,4 +47,8 @@ export class DateService {
 
     return Math.floor((endDate.getTime() - startDate.getTime()) / 24 / 60 / 60 / 1000) + 1;
   }
+
+  getUniqueIdByDate() {
+    return (new Date()).getTime().toString();
+  }
 }

@@ -3,6 +3,9 @@ export class EnvelopePlan {
     /**Id. */
     public Id: number;
 
+    /**ClientId. */
+    public ClientId: string;
+        
     /**Дата действия. */
     public ActionDate: Date;
     
