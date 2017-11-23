@@ -9,6 +9,7 @@ import { Project } from '../models/project';
 import { HttpHeaders } from '@angular/common/http';
 import { DateService } from './date.service';
 import { Envelope } from '../models/envelope';
+import { SaveEnvelopeResult } from '../models/save-envelope-result';
 
 @Injectable()
 export class HttpService {
@@ -42,5 +43,9 @@ export class HttpService {
         .set('StartDate', this.dateService.getDateJson(startDate))
         .set('EndDate', this.dateService.getDateJson(endDate))
     });
+  }
+
+  saveEnvelope(envelope: Envelope): Observable<SaveEnvelopeResult> {
+    return this.http.post<SaveEnvelopeResult>(this.baseUrl + 'private2/SaveEnvelope', envelope);
   }
 }

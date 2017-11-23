@@ -33,35 +33,39 @@
       </mat-tab>
       <mat-tab label="Планы">
         <table id="plans" style="width: 100%">
-          <tr *ngFor="let plan of envelope.Plans">
+          <tr *ngFor="let plan of envelope.Plans" [ngClass]="{ planCompleted: plan.Completed }">
             <td width="40px" class="planDate" (click)="dpActionDate.open()">
               <div>{{ plan.ActionDate | date:'dd.MM' }}</div>
               <div style="visibility: hidden; height: 0px !important">
-                  <input matInput [matDatepicker]="dpActionDate" placeholder="Дата"
-                  [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
+                <input matInput [matDatepicker]="dpActionDate" placeholder="Дата" [(ngModel)]="plan.ActionDate" [ngModelOptions]="{standalone: true}"
                   (click)="dpActionDate.open()" (dateChange)="planDateChanged(plan)">
               </div>
               <mat-datepicker #dpActionDate [touchUi]="true"></mat-datepicker>
             </td>
             <td class="planDescription">
-                <textarea matInput placeholder="Комментарий" matTextareaAutosize matAutosizeMinRows="1"
-                  matAutosizeMaxRows="5" [(ngModel)]="plan.Description" [ngModelOptions]="{standalone: true}"></textarea>
+              <textarea matInput placeholder="Комментарий" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5" [(ngModel)]="plan.Description"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="planChanged(plan)"></textarea>
             </td>
             <td width="24px" class="planSign" (click)="changePlanSign(plan)" [ngClass]="plan.cssClass">
-                <mat-icon *ngIf="plan.IsIncoming">add</mat-icon>
-                <mat-icon *ngIf="!plan.IsIncoming">remove</mat-icon>
+              <mat-icon *ngIf="plan.IsIncoming">add</mat-icon>
+              <mat-icon *ngIf="!plan.IsIncoming">remove</mat-icon>
             </td>
             <td width="100px" class="planSum" [ngClass]="plan.cssClass">
-                <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}">
+              <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="planChanged(plan)">
             </td>
             <td width="20px">
-              <mat-icon>more_vert</mat-icon>
-          </td>
-        </tr>
+              <mat-icon [matMenuTriggerFor]="planMenu" (click)="planMenuOpened(plan)">more_vert</mat-icon>
+            </td>
+          </tr>
         </table>
         <div style="margin-top: 20px;">
           <a href="#" (click)="addPlan()">Добавить план</a>
         </div>
+        <mat-menu #planMenu="matMenu">
+          <button mat-menu-item (click)="changePlanCompleted()">Выполнен</button>
+          <button mat-menu-item (click)="deletePlan()">Удалить</button>
+        </mat-menu>
       </mat-tab>
       <mat-tab label="Изображение">Изображение</mat-tab>
     </mat-tab-group>

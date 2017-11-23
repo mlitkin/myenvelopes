@@ -7,6 +7,7 @@ import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DateService } from '../services/date.service';
 import { MoneyPipe } from '../pipes/money.pipe';
 import { EnvelopePlan } from '../models/envelope-plan';
+import { SaveEnvelopeResult } from '../models/save-envelope-result';
 
 @Injectable()
 export class PrivateService {
@@ -212,5 +213,9 @@ export class PrivateService {
     }
 
     return plan.IsIncoming ? 'envelopePlan' : 'envelopePlanOut';
+  }
+
+  saveEnvelope(envelope: Envelope): Observable<SaveEnvelopeResult> {
+    return this.httpService.saveEnvelope(envelope);
   }
 }

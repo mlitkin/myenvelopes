@@ -43,6 +43,9 @@ export class Envelope {
     /**Список планов. */
     public Plans: EnvelopePlan[];
 
+    /**Список Id планов для удаления. */
+    public DeletedPlanIds: number[];
+        
     //ViewModel
 
     public background: SafeStyle;
