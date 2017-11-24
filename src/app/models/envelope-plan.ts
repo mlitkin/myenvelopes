@@ -1,5 +1,11 @@
+import { EnvelopePlanViewModel } from "./view-models/envelope-plan-view-model";
+
 /**План конверта. */
 export class EnvelopePlan {    
+    constructor() {
+        this.viewModel = new EnvelopePlanViewModel();
+    }
+
     /**Id. */
     public Id: number;
 
@@ -7,7 +13,7 @@ export class EnvelopePlan {
     public ClientId: string;
         
     /**Дата действия. */
-    public ActionDate: Date;
+    public ActionDate: Date | string;
     
     /**Планируемая сумма. Положительное - пополнение конверта. Отрицательная - извлечение из конверта. */
     public PlanAmount: number;
@@ -21,7 +27,6 @@ export class EnvelopePlan {
     /**= true, если это поступление в конверт. */
     public IsIncoming: boolean;
 
-    //ViewModel
-
-    public cssClass: string;    
+    /**ViewModel. */
+    public viewModel: EnvelopePlanViewModel;
 }

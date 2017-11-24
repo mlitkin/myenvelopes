@@ -218,4 +218,45 @@ export class PrivateService {
   saveEnvelope(envelope: Envelope): Observable<SaveEnvelopeResult> {
     return this.httpService.saveEnvelope(envelope);
   }
+
+  cloneObject(obj: any): any {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  cloneEnvelopeForSend(envelope: Envelope, changedPlans: EnvelopePlan[]): Envelope {
+    let result = this.cloneObject(envelope);
+    result.Plans = this.cloneObject(changedPlans);
+    result.Plans.forEach(x => {
+      x.ActionDate = this.dateService.getDateJson(x.ActionDate);
+      x.viewModel = undefined;
+    });
+    result.viewModel = undefined;
+    
+    return result;
+  }
+
+  /*extend(target: any, source: any) {
+    for (var key in source) {
+      if (source.hasOwnProperty(key)) {
+        if (this.isObject(source[key])) {
+          if (!target[key]) {
+            target[key] = {};
+          }
+          this.extend(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  }
+
+  isObject(val: any): boolean {
+    if (val === null) { 
+      return false; 
+    }
+
+    return typeof val === 'object';
+  }*/
 }

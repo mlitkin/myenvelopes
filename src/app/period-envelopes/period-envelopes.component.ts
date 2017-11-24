@@ -11,6 +11,8 @@ import { BalanceValue, BalanceValueType } from '../view-models/balance-value';
 import { DataService } from '../services/data.service';
 import { Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
+import { EnvelopeViewModel } from '../models/view-models/envelope-view-model';
+import { EnvelopePlanViewModel } from '../models/view-models/envelope-plan-view-model';
 
 @Component({
   selector: 'app-period-envelopes',
@@ -90,31 +92,39 @@ export class PeriodEnvelopesComponent implements OnInit {
   }
 
   fillEnvelopeViewModel(env: Envelope) {
-    env.background = this.getEnvelopeBackground(env.ImageUrl);
-    env.nameClass = this.getEnvelopeNameClass(env);
-    env.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
-    env.completePercentStr = this.getCompletePercent(env);
-    env.firstPlan = null;
-    env.firstPlanIn = null;
-    env.firstPlanOut = null;
+    if (!env.viewModel) {
+      env.viewModel = new EnvelopeViewModel();
+    }
+
+    env.viewModel.background = this.getEnvelopeBackground(env.ImageUrl);
+    env.viewModel.nameClass = this.getEnvelopeNameClass(env);
+    env.viewModel.currentAmountClass = this.getEnvelopeCurrentAmountClass(env);
+    env.viewModel.completePercentStr = this.getCompletePercent(env);
+    env.viewModel.firstPlan = null;
+    env.viewModel.firstPlanIn = null;
+    env.viewModel.firstPlanOut = null;
 
     env.Plans.forEach(plan => this.fillEnvelopePlanViewModel(env, plan));
   }
 
   fillEnvelopePlanViewModel(env: Envelope, plan: EnvelopePlan) {
+    if (!plan.viewModel) {
+      plan.viewModel = new EnvelopePlanViewModel();
+    }
+
     plan.ActionDate = this.dateService.getDateObject(plan.ActionDate);
 
-    if (!env.firstPlan) {
-      env.firstPlan = plan;
+    if (!env.viewModel.firstPlan) {
+      env.viewModel.firstPlan = plan;
     }
-    if (!env.firstPlanIn && plan.IsIncoming) {
-      env.firstPlanIn = plan;
+    if (!env.viewModel.firstPlanIn && plan.IsIncoming) {
+      env.viewModel.firstPlanIn = plan;
     }
-    if (!env.firstPlanOut && !plan.IsIncoming) {
-      env.firstPlanOut = plan;
+    if (!env.viewModel.firstPlanOut && !plan.IsIncoming) {
+      env.viewModel.firstPlanOut = plan;
     }
 
-    plan.cssClass = this.privateService.getEnvelopePlanSumClass(env, plan);
+    plan.viewModel.cssClass = this.privateService.getEnvelopePlanSumClass(env, plan);
   }
 
   getSortedEnvelopes(envelopes: Envelope[]) {
@@ -125,8 +135,8 @@ export class PeriodEnvelopesComponent implements OnInit {
 
   sortEnvelopesComparer(a: Envelope, b: Envelope, futureDate: Date): number {
     //По минимальной дате плана.
-    let minPlanDate1 = a.firstPlan ? a.firstPlan.ActionDate : futureDate;
-    let minPlanDate2 = b.firstPlan ? b.firstPlan.ActionDate : futureDate;
+    let minPlanDate1 = a.viewModel.firstPlan ? a.viewModel.firstPlan.ActionDate : futureDate;
+    let minPlanDate2 = b.viewModel.firstPlan ? b.viewModel.firstPlan.ActionDate : futureDate;
     if (minPlanDate1 > minPlanDate2) {
       return 1;
     }
@@ -135,8 +145,8 @@ export class PeriodEnvelopesComponent implements OnInit {
     }
 
     //По сумме первого плана (desc).
-    let planAmount1 = a.firstPlan ? a.firstPlan.PlanAmount : 0;
-    let planAmount2 = b.firstPlan ? b.firstPlan.PlanAmount : 0;
+    let planAmount1 = a.viewModel.firstPlan ? a.viewModel.firstPlan.PlanAmount : 0;
+    let planAmount2 = b.viewModel.firstPlan ? b.viewModel.firstPlan.PlanAmount : 0;
     if (planAmount1 > planAmount2) {
       return -1;
     }
@@ -194,17 +204,17 @@ export class PeriodEnvelopesComponent implements OnInit {
   }
 
   showHideAllPlans(envelope: Envelope, plan: EnvelopePlan) {
-    if (envelope.allPlansForShow) {
-      envelope.allPlansForShow = null;
+    if (envelope.viewModel.allPlansForShow) {
+      envelope.viewModel.allPlansForShow = null;
       return;
     }
 
-    envelope.allPlansAlign = plan.IsIncoming ? "start stretch" : "end stretch";
-    envelope.allPlansForShow = envelope.Plans.filter(x => x.IsIncoming == plan.IsIncoming);
+    envelope.viewModel.allPlansAlign = plan.IsIncoming ? "start stretch" : "end stretch";
+    envelope.viewModel.allPlansForShow = envelope.Plans.filter(x => x.IsIncoming == plan.IsIncoming);
 
     let plansSum = 0;
-    envelope.allPlansForShow.forEach(x => plansSum = plansSum + x.PlanAmount);
-    envelope.allPlansSum = plansSum;
+    envelope.viewModel.allPlansForShow.forEach(x => plansSum = plansSum + x.PlanAmount);
+    envelope.viewModel.allPlansSum = plansSum;
   }
 
   onEnvelopeClick(envelope: Envelope, $event: any) {

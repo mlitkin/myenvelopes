@@ -5,7 +5,7 @@ export class DateService {
 
   constructor() { }
 
-  getDateFormated(date: Date): string {
+  getDateFormated(date: any): string {
     date = new Date(date);
 
     var day = ('0' + date.getDate()).slice(-2);
@@ -15,7 +15,7 @@ export class DateService {
     return year + '-' + month + '-' + day;
   }
 
-  getDateJson(date: Date): string {
+  getDateJson(date: Date | string): string {
     return this.getDateFormated(date);
   }
 

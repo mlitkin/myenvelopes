@@ -39,7 +39,7 @@ export class EnvelopeEditComponent implements OnInit {
     this.projects = this.dataService.projects;
     if (id > 0) {
       let envelope = this.dataService.envelopes.find(x => x.Id == id);
-      this.envelope = <Envelope>JSON.parse(JSON.stringify(envelope));
+      this.envelope = this.privateService.cloneObject(envelope);
     } else {
       this.envelope = new Envelope();
       this.envelope.Name = 'Новый конверт';
@@ -51,16 +51,30 @@ export class EnvelopeEditComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.privateService.saveEnvelope(this.envelope)
-      .subscribe(result => {
-        alert(result);
-      });
+    let envelopeForSend = this.privateService.cloneEnvelopeForSend(this.envelope, this.changedPlans);
 
-    if (this.envelope.Id > 0) {
-      let i = _.findIndex(this.dataService.envelopes, x => x.Id == this.envelope.Id);
-      this.dataService.envelopes[i] = this.envelope;
-    }
-    this.location.back();
+    this.privateService.saveEnvelope(envelopeForSend)
+      .subscribe(res => {
+        this.envelope.Id = res.Id;
+        this.envelope.ImageUrl = res.ImageUrl;
+        this.envelope.DeletedPlanIds = [];
+
+        for (var i = 0; i < res.PlanIds.length; i++) {
+          var planId = res.PlanIds[i];
+          var plan = _.findWhere(this.envelope.Plans, { ClientId: planId.ClientId });
+          plan.Id = planId.Id;
+        }
+
+        if (!this.envelope.CurrentAmount) {
+          this.envelope.CurrentAmount = 0;
+        }
+
+        if (this.envelope.Id > 0) {
+          let i = _.findIndex(this.dataService.envelopes, x => x.Id == this.envelope.Id);
+          this.dataService.envelopes[i] = this.envelope;
+        }
+        this.location.back();
+      });
   }
 
   onBackClick() {
@@ -69,7 +83,7 @@ export class EnvelopeEditComponent implements OnInit {
 
   changePlanSign(plan: EnvelopePlan) {
     plan.IsIncoming = !plan.IsIncoming;
-    plan.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, plan);
+    plan.viewModel.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, plan);
 
     this.planChanged(plan);
   }
@@ -79,7 +93,7 @@ export class EnvelopeEditComponent implements OnInit {
     newPlan.ActionDate = this.dateService.getCurrentDate();
     newPlan.ClientId = this.dateService.getUniqueIdByDate();
     newPlan.IsIncoming = this.envelope.TargetAmount ? true : false;
-    newPlan.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, newPlan);
+    newPlan.viewModel.cssClass = this.privateService.getEnvelopePlanSumClass(this.envelope, newPlan);
 
     this.envelope.Plans.push(newPlan);
 
@@ -129,21 +143,21 @@ export class EnvelopeEditComponent implements OnInit {
   planChanged(plan: EnvelopePlan) {
     let existsPlan = this.getExistedPlan(plan, this.changedPlans);
     if (!existsPlan) {
-        this.changedPlans.push(plan);
+      this.changedPlans.push(plan);
     }
   }
 
   getExistedPlan(envelopePlan: EnvelopePlan, plans: EnvelopePlan[]): EnvelopePlan {
     return _.find(plans, function (plan) {
-        if (plan == envelopePlan) {
-            return true;
-        }
+      if (plan == envelopePlan) {
+        return true;
+      }
 
-        if (plan.Id > 0 && envelopePlan.Id > 0 && plan.Id == envelopePlan.Id) {
-            return true;
-        }
-        
-        return false;
+      if (plan.Id > 0 && envelopePlan.Id > 0 && plan.Id == envelopePlan.Id) {
+        return true;
+      }
+
+      return false;
     });
-};
+  };
 }

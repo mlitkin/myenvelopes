@@ -1,10 +1,12 @@
 import { SafeStyle } from "@angular/platform-browser";
 import { EnvelopePlan } from "./envelope-plan";
+import { EnvelopeViewModel } from "./view-models/envelope-view-model";
 
 /**Конверт. */
 export class Envelope {
     constructor() {
         this.Plans = [];
+        this.viewModel = new EnvelopeViewModel();
     }
 
     /**Id. */
@@ -46,16 +48,6 @@ export class Envelope {
     /**Список Id планов для удаления. */
     public DeletedPlanIds: number[];
         
-    //ViewModel
-
-    public background: SafeStyle;
-    public nameClass: string;
-    public currentAmountClass: string;
-    public completePercentStr: string;
-    public firstPlan: EnvelopePlan;
-    public firstPlanIn: EnvelopePlan;
-    public firstPlanOut: EnvelopePlan;
-    public allPlansForShow: EnvelopePlan[];
-    public allPlansAlign: string;
-    public allPlansSum: number;
+    /**ViewModel. */
+    public viewModel: EnvelopeViewModel;
 }

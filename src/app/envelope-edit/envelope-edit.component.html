@@ -46,11 +46,11 @@
               <textarea matInput placeholder="Комментарий" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5" [(ngModel)]="plan.Description"
                 [ngModelOptions]="{standalone: true}" (ngModelChange)="planChanged(plan)"></textarea>
             </td>
-            <td width="24px" class="planSign" (click)="changePlanSign(plan)" [ngClass]="plan.cssClass">
+            <td width="24px" class="planSign" (click)="changePlanSign(plan)" [ngClass]="plan.viewModel.cssClass">
               <mat-icon *ngIf="plan.IsIncoming">add</mat-icon>
               <mat-icon *ngIf="!plan.IsIncoming">remove</mat-icon>
             </td>
-            <td width="100px" class="planSum" [ngClass]="plan.cssClass">
+            <td width="100px" class="planSum" [ngClass]="plan.viewModel.cssClass">
               <input matInput placeholder="Сумма" type="number" [(ngModel)]="plan.PlanAmount" [ngModelOptions]="{standalone: true}"
                 (ngModelChange)="planChanged(plan)">
             </td>
