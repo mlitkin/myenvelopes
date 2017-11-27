@@ -24,6 +24,8 @@ import { MatButtonModule,
  } from '@angular/material';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
+import { CookieModule } from 'ngx-cookie';
+
 import { GlobalErrorHandler } from './global-error-handler';
 import { AuthGuard }   from './auth.guard';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
@@ -41,7 +43,6 @@ import { LoginComponent } from './login/login.component';
 import { PeriodEnvelopesComponent } from './period-envelopes/period-envelopes.component';
 import { HomeComponent } from './home/home.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { MyInterceptor } from './my-interceptor';
 import { MoneyPipe } from './pipes/money.pipe';
 import { EnvelopePlansComponent } from './envelope-plans/envelope-plans.component';
@@ -93,10 +94,11 @@ const appRoutes: Routes =[
     MatExpansionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTabsModule
+    MatTabsModule,
+    CookieModule.forRoot()
   ],
   providers: [ DecimalPipe,
-    UserService, AuthGuard, HttpService, DialogService, ErrorService, CookieService, PrivateService,
+    UserService, AuthGuard, HttpService, DialogService, ErrorService, PrivateService,
     DateService, MoneyPipe, DataService,
     {
       provide: ErrorHandler, 
@@ -117,8 +119,8 @@ const appRoutes: Routes =[
     },
     {
       provide: APP_BASE_HREF, 
-      useValue: '/' //Локально
-      //useValue: '/ui2/' //Прод
+      //useValue: '/' //Локально
+      useValue: '/ui2/' //Прод
     }],
   bootstrap: [AppComponent]
 })

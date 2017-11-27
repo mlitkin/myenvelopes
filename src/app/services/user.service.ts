@@ -3,10 +3,7 @@ import { User, UserRole } from "../models/user";
 import {HttpService} from './http.service';
 import {Md5} from 'ts-md5/dist/md5';
 import { Router } from '@angular/router';
-import {CookieService} from 'angular2-cookie/core';
-import { CookieOptionsArgs } from 'angular2-cookie/services';
-
-//Из-за CookieService в prod-режиме падает ошибка провайдера!
+import { CookieService, CookieOptions } from 'ngx-cookie';
 
 @Injectable()
 export class UserService {
@@ -35,7 +32,7 @@ export class UserService {
           //Сохраняем данные в куки.
           var expireDate = new Date ();
           expireDate.setDate(expireDate.getDate() + 90);
-          let opt: CookieOptionsArgs = { expires: expireDate };
+          let opt: CookieOptions = { expires: expireDate };
           
           this.cookieService.put('login', login, opt);
           this.cookieService.put('password', passwordHash, opt);
