@@ -17,6 +17,12 @@ export class DataService {
   /**Значения баланса периода. */
   public balanceValues: BalanceValue[];
 
+  /**Дата начала (для формы редакции конверта. */
+  public startDate: Date;
+  
+  /**Дата окончания (для формы редакции конверта. */
+  public endDate: Date;
+    
   constructor() { }
 
 }

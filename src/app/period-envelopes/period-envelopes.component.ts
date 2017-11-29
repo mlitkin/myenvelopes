@@ -103,6 +103,7 @@ export class PeriodEnvelopesComponent implements OnInit {
     env.viewModel.firstPlan = null;
     env.viewModel.firstPlanIn = null;
     env.viewModel.firstPlanOut = null;
+    env.viewModel.allPlansForShow = null;
 
     env.Plans.forEach(plan => this.fillEnvelopePlanViewModel(env, plan));
   }
@@ -225,6 +226,8 @@ export class PeriodEnvelopesComponent implements OnInit {
       }
 
     //Открываем конверт на редакцию.
+    this.dataService.startDate = this.selectedProject.PeriodStartDate;
+    this.dataService.endDate = this.selectedProject.PeriodEndDate;
     this.router.navigate(['envelope-edit', envelope.Id]);
   }
 }

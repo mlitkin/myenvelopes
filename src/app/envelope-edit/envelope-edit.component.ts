@@ -21,6 +21,8 @@ export class EnvelopeEditComponent implements OnInit {
   projects: Project[];
   selectedPlan: EnvelopePlan;
   changedPlans: EnvelopePlan[];
+  startDate: Date;
+  endDate: Date;
 
   constructor(private privateService: PrivateService, private activateRoute: ActivatedRoute, private router: Router,
     private dataService: DataService, private dateService: DateService, private location: Location) {
@@ -34,6 +36,9 @@ export class EnvelopeEditComponent implements OnInit {
       this.redirectToPeriodEnvelopes();
       return;
     }
+
+    this.startDate = this.dateService.getDateObject(this.dataService.startDate);
+    this.endDate = this.dateService.getDateObject(this.dataService.endDate);
 
     let id = this.activateRoute.snapshot.params['id'];
     this.projects = this.dataService.projects;
@@ -60,8 +65,8 @@ export class EnvelopeEditComponent implements OnInit {
         this.envelope.DeletedPlanIds = [];
 
         for (var i = 0; i < res.PlanIds.length; i++) {
-          var planId = res.PlanIds[i];
-          var plan = _.findWhere(this.envelope.Plans, { ClientId: planId.ClientId });
+          let planId = res.PlanIds[i];
+          let plan = _.findWhere(this.envelope.Plans, { ClientId: planId.ClientId });
           plan.Id = planId.Id;
         }
 
@@ -71,6 +76,19 @@ export class EnvelopeEditComponent implements OnInit {
 
         if (this.envelope.Id > 0) {
           let i = _.findIndex(this.dataService.envelopes, x => x.Id == this.envelope.Id);
+
+          //Оставляем только невыполненные планы в периоде.
+          this.envelope.Plans = this.envelope.Plans.filter(plan => {
+            if (plan.Completed) {
+              return false;
+            }
+
+            let actionDate = this.dateService.getDateObject(plan.ActionDate);
+
+            return actionDate >= this.startDate
+              && actionDate <= this.endDate;
+          });
+
           this.dataService.envelopes[i] = this.envelope;
         }
         this.location.back();
