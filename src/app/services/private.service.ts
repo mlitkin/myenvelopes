@@ -121,27 +121,28 @@ export class PrivateService {
         }
       }
 
+      let envelopeSumIn = 0;
+      let envelopeSumOut = 0;
       envelope.Plans.forEach(plan => {
-        if (envelope.IsDebet) {
-          if (plan.IsIncoming) {
-            sumInDebet = sumInDebet + plan.PlanAmount;
-            availableSaldo = availableSaldo + plan.PlanAmount;
-          } else {
-            sumOut = sumOut + plan.PlanAmount;
-            availableSaldo = availableSaldo - plan.PlanAmount;
-          }
+        if (plan.IsIncoming) {
+          envelopeSumIn = envelopeSumIn + plan.PlanAmount;
         } else {
-          if (plan.IsIncoming) {
-            sumIn = sumIn + plan.PlanAmount;
-          } else {
-            sumOut = sumOut + plan.PlanAmount;
-          }
-
-          if (!envelope.IsExternalCurrentAmount || plan.IsIncoming) {
-            availableSaldo = availableSaldo - plan.PlanAmount;
-          }
+          envelopeSumOut = envelopeSumOut + plan.PlanAmount;
         }
       });
+
+      sumOut = sumOut + envelopeSumOut;
+      if (envelope.IsDebet) {
+        sumInDebet = sumInDebet + envelopeSumIn;
+        availableSaldo = availableSaldo + envelopeSumIn - envelopeSumOut;
+      } else {
+        sumIn = sumIn + envelopeSumIn;
+        availableSaldo = availableSaldo - envelopeSumIn;
+        let diff = envelope.CurrentAmount + envelopeSumIn - envelopeSumOut;
+        if (diff < 0) {
+          availableSaldo = availableSaldo + diff;
+        }
+      }
     });
 
     let days = this.dateService.getDaysBetweenDates(this.dateService.getCurrentDate(), project.PeriodEndDate);
